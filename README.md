@@ -5,7 +5,7 @@ Microservice architecture for a service desk application.
 ## SERVICES
 
 - Auth - user module to handle sign-in, password reset etc
-- Auto Assignment - run jobs to assign tickets to agents based on a proirity queue data structure.
+- Auto Assignment - run jobs to assign tickets to agents based on a priority queue data structure.
 - Category - ticket categories which will hold the auto-assignment logic
 - Escalation - to handle dynamic escalation matrices which shall be attached to tickets raised.
 - Groups - These will be attached to categories such that an auto assignment can run on the group attached to a category.
@@ -39,7 +39,7 @@ Microservice architecture for a service desk application.
 - Docker
 - Kubernetes
 
-_To be update the README as the application continues._
+_To update the README as the application continues._
 
 ## License
 

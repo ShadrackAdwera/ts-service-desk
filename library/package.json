@@ -1,0 +1,25 @@
+{
+  "name": "@adwesh/service-desk",
+  "version": "1.0.1",
+  "description": "Event emmitting library for the service desk microservice",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
+  "scripts": {
+    "clean": "del ./build/*",
+    "build": "npm run clean && tsc",
+    "pub": "git add . && git commit -m \"config updates\" && npm version patch && npm run build && npm publish"
+  },
+  "keywords": [],
+  "author": "adwera",
+  "license": "ISC",
+  "devDependencies": {
+    "del-cli": "^4.0.1",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "node-nats-streaming": "^0.3.2"
+  }
+}

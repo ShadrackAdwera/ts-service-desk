@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "del ./build/*",
     "build": "npm run clean && tsc",
-    "pub": "git add . && git commit -m \"config updates\" && npm version patch && npm run build && npm publish --access=public"
+    "pub": "git add . && git commit -m \"config updates\" && npm version patch && npm run build && npm publish"
   },
   "keywords": [],
   "author": "adwera",

@@ -19,6 +19,8 @@ Microservice architecture for a service desk application.
 | Event           | Emmited By (Service)                      | Listened to By (Service)                                    |
 | --------------- | ----------------------------------------- | ----------------------------------------------------------- |
 | UserCreated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned             |
+| UserDeleted     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned             |
+| UserUpdated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned             |
 | CategoryCreated | Category                                  | Tickets                                                     |
 | CategoryUpdated | Category                                  | Tickets                                                     |
 | CategoryDeleted | Category                                  | Tickets                                                     |

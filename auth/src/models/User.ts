@@ -6,8 +6,6 @@ interface UserDoc extends Document {
   username: string;
   email: string;
   password: string;
-  section: string;
-  category: string;
   resetToken?: string;
   tokenExpirationDate?: Date;
   roles: string[];
@@ -18,8 +16,6 @@ interface UserModel extends Model<UserDoc> {
   username: string;
   email: string;
   password: string;
-  section: string;
-  category: string;
   resetToken?: string;
   tokenExpirationDate?: Date;
   roles: string[];
@@ -33,7 +29,7 @@ const userSchema = new Schema(
     // group: { type: Schema.Types.ObjectId, required: true, ref: 'group' }, might change this to also include the group a user belongs to
     resetToken: { type: String },
     tokenExpirationDate: { type: Date },
-    roles: [{ type: String, enum: Object.keys(Roles), default: Roles.USER }],
+    roles: [{ type: String, enum: Object.values(Roles), default: Roles.USER }],
   },
   { timestamps: true, toJSON: { getters: true } }
 );

@@ -8,15 +8,9 @@ import brypto from 'crypto';
 
 import { User } from '../models/User';
 
-interface IExpress {
-  req: Request;
-  res: Response;
-  next: NextFunction;
-}
-
 const DEFAULT_PASSWORD = '123456';
 
-const addUsers = async ({ req, res, next }: IExpress) => {
+const addUsers = async (req: Request, res: Response, next: NextFunction) => {
   // TODO: Only admins to have access to this endpoint - decode token to get ROLE
   const error = validationResult(req);
   if (!error.isEmpty()) {
@@ -64,7 +58,7 @@ const addUsers = async ({ req, res, next }: IExpress) => {
   res.status(201).json({ message: 'User created' });
 };
 
-const signUp = async ({ req, res, next }: IExpress) => {
+const signUp = async (req: Request, res: Response, next: NextFunction) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return next(new HttpError('Invalid inputs', 422));
@@ -104,6 +98,7 @@ const signUp = async ({ req, res, next }: IExpress) => {
   try {
     await newUser.save();
   } catch (error) {
+    console.log(error);
     return next(new HttpError('An error occured, try again', 500));
   }
 
@@ -121,7 +116,7 @@ const signUp = async ({ req, res, next }: IExpress) => {
   });
 };
 
-const login = async ({ req, res, next }: IExpress) => {
+const login = async (req: Request, res: Response, next: NextFunction) => {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return next(new HttpError('Invalid inputs', 422));
@@ -169,7 +164,11 @@ const login = async ({ req, res, next }: IExpress) => {
   });
 };
 
-const requestPasswordReset = async ({ req, res, next }: IExpress) => {
+const requestPasswordReset = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { email } = req.body;
   let foundUser;
 
@@ -250,7 +249,11 @@ const resetPassword = async (
   res.status(200).json({ message: 'Password reset successful' });
 };
 
-const modifyUserRole = async ({ req, res, next }: IExpress) => {
+const modifyUserRole = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   // TODO: Admin Role to have access to this controller
   const error = validationResult(req);
   if (!error.isEmpty()) {

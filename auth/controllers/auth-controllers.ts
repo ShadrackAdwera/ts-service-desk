@@ -195,3 +195,56 @@ const requestPasswordReset = async ({ req, res, next }: IExpress) => {
   //TODO: Send email with reset link to user : https://my-frontend-url/reset-token/${resetTkn}
   res.status(200).json({ message: 'Check your email for a reset email link' });
 };
+
+const resetPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { password, confirmPassword } = req.body;
+  const { resetToken } = req.params;
+  let foundUser;
+  let hashedPassword: string;
+
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return next(new HttpError('Invalid email', 422));
+  }
+
+  //check if passwords match
+  if (password !== confirmPassword) {
+    return next(new HttpError('The passwords do not match', 422));
+  }
+
+  // check if user exists in DB
+  try {
+    foundUser = await User.findOne({
+      resetToken,
+      tokenExpirationDate: { $gt: Date.now() },
+    }).exec();
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+
+  if (!foundUser) {
+    return next(new HttpError('The password reset request is invalid', 400));
+  }
+
+  // hash new password
+  try {
+    hashedPassword = await bcrypt.hash(password, 12);
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+  foundUser.password = hashedPassword;
+  foundUser.tokenExpirationDate = undefined;
+  foundUser.resetToken = undefined;
+
+  try {
+    await foundUser.save();
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+
+  res.status(200).json({ message: 'Password reset successful' });
+};

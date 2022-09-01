@@ -23,13 +23,12 @@ const addUsers = async ({ req, res, next }: IExpress) => {
     return next(new HttpError('Invalid inputs', 422));
   }
   let foundUser;
-  let foundSection;
   let hashedPassword: string;
-  const { username, email, section, role, category } = req.body;
+  const { username, email, role } = req.body;
 
   //check if email exists in the DB
   try {
-    foundUser = await User.findOne({ email }).populate('section').exec();
+    foundUser = await User.findOne({ email }).exec();
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
@@ -49,7 +48,6 @@ const addUsers = async ({ req, res, next }: IExpress) => {
     username,
     email,
     password: hashedPassword,
-    section: foundSection,
     roles: [role],
     resetToken: null,
     tokenExpirationDate: undefined,
@@ -72,14 +70,13 @@ const signUp = async ({ req, res, next }: IExpress) => {
     return next(new HttpError('Invalid inputs', 422));
   }
   let foundUser;
-  //let foundSection;
   let hashedPassword: string;
   let token: string;
-  const { username, email, password, section } = req.body;
+  const { username, email, password } = req.body;
 
   //check if email exists in the DB
   try {
-    foundUser = await User.findOne({ email }).populate('section').exec();
+    foundUser = await User.findOne({ email }).exec();
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
@@ -118,12 +115,10 @@ const signUp = async ({ req, res, next }: IExpress) => {
     return next(new HttpError('An error occured, try again', 500));
   }
 
-  res
-    .status(201)
-    .json({
-      message: 'Sign Up successful',
-      user: { id: newUser.id, email, token },
-    });
+  res.status(201).json({
+    message: 'Sign Up successful',
+    user: { id: newUser.id, email, token },
+  });
 };
 
 const login = async ({ req, res, next }: IExpress) => {
@@ -138,7 +133,7 @@ const login = async ({ req, res, next }: IExpress) => {
 
   //check if email exists in the DB
   try {
-    foundUser = await User.findOne({ email }).populate('section').exec();
+    foundUser = await User.findOne({ email }).exec();
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
@@ -267,7 +262,7 @@ const modifyUserRole = async ({ req, res, next }: IExpress) => {
 
   //check if email exists in the DB
   try {
-    foundUser = await User.findById(userId).populate('section').exec();
+    foundUser = await User.findById(userId).exec();
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
@@ -293,11 +288,9 @@ const modifyUserRole = async ({ req, res, next }: IExpress) => {
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
-  res
-    .status(201)
-    .json({
-      message: `${userRole} role has been added to ${foundUser.username}'s roles`,
-    });
+  res.status(201).json({
+    message: `${userRole} role has been added to ${foundUser.username}'s roles`,
+  });
 };
 
 export {

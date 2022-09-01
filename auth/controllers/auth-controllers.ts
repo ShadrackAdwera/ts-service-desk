@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import brypto from 'crypto';
 
 import { User } from '../models/User';
 
@@ -161,11 +162,36 @@ const login = async ({ req, res, next }: IExpress) => {
     return next(new HttpError('An error occured, try again', 500));
   }
 
-  //TODO: Add section name to response body.
-  res
-    .status(201)
-    .json({
-      message: 'Login Successful',
-      user: { id: foundUser.id, email, token, roles: foundUser.role },
-    });
+  res.status(201).json({
+    message: 'Login Successful',
+    user: { id: foundUser.id, email, token, role: foundUser.role },
+  });
+};
+
+const requestPasswordReset = async ({ req, res, next }: IExpress) => {
+  const { email } = req.body;
+  let foundUser;
+
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return next(new HttpError('Invalid email', 422));
+  }
+
+  // check if user exists in DB
+  try {
+    foundUser = await User.findOne({ email }).exec();
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+
+  if (!foundUser) {
+    return next(new HttpError('This account does not exist', 400));
+  }
+  const resetTkn = brypto.randomBytes(64).toString('hex');
+  const resetDate = new Date(Date.now() + 3600000);
+  foundUser.resetToken = resetTkn;
+  foundUser.tokenExpirationDate = resetDate;
+
+  //TODO: Send email with reset link to user : https://my-frontend-url/reset-token/${resetTkn}
+  res.status(200).json({ message: 'Check your email for a reset email link' });
 };

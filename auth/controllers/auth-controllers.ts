@@ -23,12 +23,13 @@ const addUsers = async ({ req, res, next }: IExpress) => {
     return next(new HttpError('Invalid inputs', 422));
   }
   let foundUser;
+  let foundSection;
   let hashedPassword: string;
-  const { username, email, role } = req.body;
+  const { username, email, section, role, category } = req.body;
 
-  //check if email exists in the DB - to outsource
+  //check if email exists in the DB
   try {
-    foundUser = await User.findOne({ email }, '-password').exec();
+    foundUser = await User.findOne({ email }).populate('section').exec();
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
@@ -48,7 +49,8 @@ const addUsers = async ({ req, res, next }: IExpress) => {
     username,
     email,
     password: hashedPassword,
-    role,
+    section: foundSection,
+    roles: [role],
     resetToken: null,
     tokenExpirationDate: undefined,
   });
@@ -56,7 +58,7 @@ const addUsers = async ({ req, res, next }: IExpress) => {
   try {
     await newUser.save();
     if (role === Roles.AGENT) {
-      //TODO: publish UserCreatedEvent(userId, categoryId);
+      // TODO: Publish UserCreatedEvent
     }
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
@@ -65,35 +67,39 @@ const addUsers = async ({ req, res, next }: IExpress) => {
 };
 
 const signUp = async ({ req, res, next }: IExpress) => {
-  const isError = validationResult(req);
-  if (!isError.isEmpty()) {
-    return next(new HttpError('Provide valid inputs', 422));
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return next(new HttpError('Invalid inputs', 422));
   }
-  const { username, email, password } = req.body;
-  // outsource this to a helper function
   let foundUser;
+  //let foundSection;
   let hashedPassword: string;
   let token: string;
+  const { username, email, password, section } = req.body;
+
+  //check if email exists in the DB
   try {
-    foundUser = await User.findOne({ email }).exec();
+    foundUser = await User.findOne({ email }).populate('section').exec();
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
   if (foundUser) {
-    return next(new HttpError('User exists, login instead', 500));
+    return next(new HttpError('Email exists, login instead', 400));
   }
 
+  //hash password
   try {
     hashedPassword = await bcrypt.hash(password, 12);
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
 
+  // create new user
   const newUser = new User({
     username,
     email,
     password: hashedPassword,
-    role: Roles.ADMIN,
+    roles: [Roles.ADMIN],
     resetToken: null,
     tokenExpirationDate: undefined,
   });
@@ -101,23 +107,23 @@ const signUp = async ({ req, res, next }: IExpress) => {
   try {
     await newUser.save();
   } catch (error) {
-    console.log(error);
     return next(new HttpError('An error occured, try again', 500));
   }
-  //TODO: Emit UserCreate Event
+
   try {
-    token = jwt.sign(
-      { userId: newUser.id, email: newUser.email },
-      process.env.JWT_KEY!,
-      { expiresIn: '1h' }
-    );
+    token = await jwt.sign({ id: newUser.id, email }, process.env.JWT_KEY!, {
+      expiresIn: '1h',
+    });
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
-  res.status(201).json({
-    message: 'Sign Up successful',
-    user: { id: newUser.id, email, token },
-  });
+
+  res
+    .status(201)
+    .json({
+      message: 'Sign Up successful',
+      user: { id: newUser.id, email, token },
+    });
 };
 
 const login = async ({ req, res, next }: IExpress) => {
@@ -164,7 +170,7 @@ const login = async ({ req, res, next }: IExpress) => {
 
   res.status(201).json({
     message: 'Login Successful',
-    user: { id: foundUser.id, email, token, role: foundUser.role },
+    user: { id: foundUser.id, email, token, role: foundUser.roles },
   });
 };
 
@@ -247,4 +253,58 @@ const resetPassword = async (
   }
 
   res.status(200).json({ message: 'Password reset successful' });
+};
+
+const modifyUserRole = async ({ req, res, next }: IExpress) => {
+  // TODO: Admin Role to have access to this controller
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return next(new HttpError('Invalid inputs', 422));
+  }
+  let foundUser;
+  const { userRole } = req.body;
+  const userId = req.params.userId;
+
+  //check if email exists in the DB
+  try {
+    foundUser = await User.findById(userId).populate('section').exec();
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+  if (!foundUser) {
+    return next(new HttpError('This user does not exist!', 404));
+  }
+
+  const isAgent = foundUser.roles.find(
+    (role) =>
+      role === Roles.AGENT || role === Roles.ADMIN || role === Roles.USER
+  );
+  if (isAgent) {
+    if (isAgent === userRole) {
+      return next(new HttpError('This user has the role provided', 400));
+    }
+  }
+  foundUser.roles.push(userRole);
+  try {
+    await foundUser.save();
+    if (userRole === Roles.AGENT) {
+      //TODO: Publish UserUpdatedEvent
+    }
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+  res
+    .status(201)
+    .json({
+      message: `${userRole} role has been added to ${foundUser.username}'s roles`,
+    });
+};
+
+export {
+  signUp,
+  login,
+  requestPasswordReset,
+  resetPassword,
+  addUsers,
+  modifyUserRole,
 };

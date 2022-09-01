@@ -8,7 +8,7 @@ build:
   local:
     push: false
   artifacts:
-    - image: adwera/ts-service-desk-auth
+    - image: adwera/sd-auth
       context: auth
       docker:
         dockerfile: Dockerfile

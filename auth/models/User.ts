@@ -28,6 +28,7 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     resetToken: { type: String },
     tokenExpirationDate: { type: Date },
+    role: { type: String, required: true, enum: Object.values(Roles) },
   },
   { timestamps: true, toJSON: { getters: true } }
 );

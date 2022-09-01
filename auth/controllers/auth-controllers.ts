@@ -118,3 +118,54 @@ const signUp = async ({ req, res, next }: IExpress) => {
     user: { id: newUser.id, email, token },
   });
 };
+
+const login = async ({ req, res, next }: IExpress) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return next(new HttpError('Invalid inputs', 422));
+  }
+  let foundUser;
+  let isPassword: boolean;
+  let token: string;
+  const { email, password } = req.body;
+
+  //check if email exists in the DB
+  try {
+    foundUser = await User.findOne({ email }).populate('section').exec();
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+  if (!foundUser) {
+    return next(new HttpError('Email does not exist, sign up instead', 400));
+  }
+
+  //compare passwords
+  try {
+    isPassword = await bcrypt.compare(password, foundUser.password);
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+
+  if (!isPassword) {
+    return next(new HttpError('Invalid password', 422));
+  }
+
+  //generate token
+  try {
+    token = await jwt.sign(
+      { id: foundUser.id, email: foundUser.email },
+      process.env.JWT_KEY!,
+      { expiresIn: '1h' }
+    );
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+
+  //TODO: Add section name to response body.
+  res
+    .status(201)
+    .json({
+      message: 'Login Successful',
+      user: { id: foundUser.id, email, token, roles: foundUser.role },
+    });
+};

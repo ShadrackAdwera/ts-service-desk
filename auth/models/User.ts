@@ -1,5 +1,5 @@
 import { Roles } from '@adwesh/service-desk';
-import { Schema, Document, model } from 'mongoose';
+import { Schema, Model, Document, model } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 interface IUserDoc extends Document {
@@ -12,7 +12,7 @@ interface IUserDoc extends Document {
   version: number;
 }
 
-interface IUserSchema extends Schema<IUserDoc> {
+interface IUserSchema extends Model<IUserDoc> {
   username: string;
   email: string;
   password: string;

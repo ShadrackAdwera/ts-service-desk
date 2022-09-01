@@ -12,7 +12,7 @@ interface IUserDoc extends Document {
   version: number;
 }
 
-interface IUserSchema extends Model<IUserDoc> {
+interface IUserModel extends Model<IUserDoc> {
   username: string;
   email: string;
   password: string;
@@ -34,5 +34,5 @@ const userSchema = new Schema(
 );
 
 userSchema.plugin(updateIfCurrentPlugin);
-const User = model<IUserDoc, IUserSchema>('user', userSchema);
+const User = model<IUserDoc, IUserModel>('user', userSchema);
 export { User };

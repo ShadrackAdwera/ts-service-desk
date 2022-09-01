@@ -13,6 +13,56 @@ interface IExpress {
   next: NextFunction;
 }
 
+const DEFAULT_PASSWORD = '123456';
+
+const addUsers = async ({ req, res, next }: IExpress) => {
+  // TODO: Only admins to have access to this endpoint - decode token to get ROLE
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return next(new HttpError('Invalid inputs', 422));
+  }
+  let foundUser;
+  let hashedPassword: string;
+  const { username, email, role } = req.body;
+
+  //check if email exists in the DB - to outsource
+  try {
+    foundUser = await User.findOne({ email }, '-password').exec();
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+  if (foundUser) {
+    return next(new HttpError('Email exists!', 400));
+  }
+
+  //hash password
+  try {
+    hashedPassword = await bcrypt.hash(DEFAULT_PASSWORD, 12);
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+
+  // create new user
+  const newUser = new User({
+    username,
+    email,
+    password: hashedPassword,
+    role,
+    resetToken: null,
+    tokenExpirationDate: undefined,
+  });
+
+  try {
+    await newUser.save();
+    if (role === Roles.AGENT) {
+      //TODO: publish UserCreatedEvent(userId, categoryId);
+    }
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+  res.status(201).json({ message: 'User created' });
+};
+
 const signUp = async ({ req, res, next }: IExpress) => {
   const isError = validationResult(req);
   if (!isError.isEmpty()) {
@@ -43,6 +93,8 @@ const signUp = async ({ req, res, next }: IExpress) => {
     email,
     password: hashedPassword,
     role: Roles.ADMIN,
+    resetToken: null,
+    tokenExpirationDate: undefined,
   });
 
   try {
@@ -51,7 +103,7 @@ const signUp = async ({ req, res, next }: IExpress) => {
     console.log(error);
     return next(new HttpError('An error occured, try again', 500));
   }
-  //emit UserCreate Event
+  //TODO: Emit UserCreate Event
   try {
     token = jwt.sign(
       { userId: newUser.id, email: newUser.email },
@@ -61,10 +113,8 @@ const signUp = async ({ req, res, next }: IExpress) => {
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
-  res
-    .status(201)
-    .json({
-      message: 'Sign Up successful',
-      user: { id: newUser.id, email, token },
-    });
+  res.status(201).json({
+    message: 'Sign Up successful',
+    user: { id: newUser.id, email, token },
+  });
 };

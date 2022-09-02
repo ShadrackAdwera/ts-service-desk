@@ -5,14 +5,16 @@ deploy:
     manifests:
       - ./k8s/*
 build:
-  local:
-    push: false
+  googleCloudBuild:
+    projectId: servicedesk-dev-361311
+  # local:
+  #   push: false
   artifacts:
-    - image: adwera/sd-auth
+    - image: us.gcr.io/servicedesk-dev-361311/auth
       context: auth
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
-          - dest: .
-            src: 'src/**/*.ts'
+          - src: 'src/**/*.ts'
+            dest: .

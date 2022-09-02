@@ -112,7 +112,7 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
 
   res.status(201).json({
     message: 'Sign Up successful',
-    user: { id: newUser.id, email, token },
+    user: { id: newUser.id, username, email, token, roles: newUser.roles },
   });
 };
 
@@ -160,7 +160,13 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
   res.status(201).json({
     message: 'Login Successful',
-    user: { id: foundUser.id, email, token, role: foundUser.roles },
+    user: {
+      id: foundUser.id,
+      username: foundUser.username,
+      email,
+      token,
+      roles: foundUser.roles,
+    },
   });
 };
 

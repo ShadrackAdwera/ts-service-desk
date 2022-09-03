@@ -6,6 +6,6 @@ export interface UserCreatedEvent {
   data: {
     id: string;
     email: string;
-    role: Roles[];
+    roles: Roles[];
   };
 }

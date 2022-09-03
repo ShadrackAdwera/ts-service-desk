@@ -1,6 +1,5 @@
 import { Document, Model, Schema, model } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
-import { Roles } from '@adwesh/service-desk';
 
 interface GroupDoc extends Document {
   title: string;
@@ -16,17 +15,15 @@ interface GroupModel extends Model<GroupDoc> {
 }
 
 interface UserDoc extends Document {
-    userId: string;
-    email: string;
-    roles: string[];
-    version: number;
-  }
-  
-  interface UserModel extends Model<UserDoc> {
-    userId: string;
-    email: string;
-    roles: string[];
-  }
+  userId: string;
+  email: string;
+  version: number;
+}
+
+interface UserModel extends Model<UserDoc> {
+  userId: string;
+  email: string;
+}
 
 const groupSchema = new Schema(
   {
@@ -38,13 +35,12 @@ const groupSchema = new Schema(
 );
 
 const userSchema = new Schema(
-    {
-      userId: { type: String, required: true },
-      email: { type: String, required: true },
-      roles: [{ type: String, enum: Object.values(Roles), default: Roles.AGENT }],
-    },
-    { timestamps: true, toJSON: { getters: true } }
-  );
+  {
+    userId: { type: String, required: true },
+    email: { type: String, required: true },
+  },
+  { timestamps: true, toJSON: { getters: true } }
+);
 
 groupSchema.set('versionKey', 'version');
 groupSchema.plugin(updateIfCurrentPlugin);

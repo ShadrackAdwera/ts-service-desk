@@ -1,16 +1,23 @@
 # TS SERVICE DESK
 
-Microservice architecture for a service desk application.
+- Microservice architecture for a service desk application.
+- Connection to the services is through a LoadBalancer attached to it is a deployment with an ingress configuration with a set of routing rules.
+
+## Cloud Provider
+
+- GCP
 
 ## SERVICES
 
-- Auth - user module to handle sign-in, password reset etc
-- Auto Assignment - run jobs to assign tickets to agents based on a priority queue data structure.
-- Category - ticket categories which will hold the auto-assignment logic
-- Escalation - to handle dynamic escalation matrices which shall be attached to tickets raised.
-- Groups - These will be attached to categories such that an auto assignment can run on the group attached to a category.
-- Tickets
-- Tickets Assigned - to keep a record of the number of tickets assigned to an agent
+| Service          | Description                                                                                                    | CluterIP |
+| ---------------- | -------------------------------------------------------------------------------------------------------------- | -------- |
+| Auth             | user module to handle sign-in, password reset etc                                                              | 5000     |
+| Groups           | These will be attached to categories such that an auto assignment can run on the group attached to a category. | 5001     |
+| Category         | ticket categories which will hold the auto-assignment logic                                                    | 5002     |
+| Tickets          | Tickets Raised                                                                                                 | 5003     |
+| Tickets Assigned | To keep a record of the number of tickets assigned to an agent                                                 | 5004     |
+| Auto Assignment  | Run jobs to assign tickets to agents based on a priority queue data structure.                                 | 5005     |
+| Escalation       | To handle dynamic escalation matrices which shall be attached to tickets raised.                               | 5006     |
 
 **Services communicate asynchronously with each other by emitting events**
 

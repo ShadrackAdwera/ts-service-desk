@@ -1,5 +1,4 @@
-import { HttpError } from '@adwesh/common';
-import { Roles } from '@adwesh/service-desk';
+import { HttpError, natsWraper } from '@adwesh/common';
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
@@ -7,6 +6,9 @@ import jwt from 'jsonwebtoken';
 import brypto from 'crypto';
 
 import { User } from '../models/User';
+import { UserCreatedPublisher } from '../events/UserCreatedPublisher';
+import { UserUpdatedPublisher } from '../events/UserUpdatedPublisher';
+import { Roles } from '@adwesh/service-desk';
 
 const DEFAULT_PASSWORD = '123456';
 
@@ -18,7 +20,11 @@ const addUsers = async (req: Request, res: Response, next: NextFunction) => {
   }
   let foundUser;
   let hashedPassword: string;
-  const { username, email, role } = req.body;
+  const {
+    username,
+    email,
+    roles,
+  }: { username: string; email: string; roles: string[] } = req.body;
 
   //check if email exists in the DB
   try {
@@ -42,15 +48,20 @@ const addUsers = async (req: Request, res: Response, next: NextFunction) => {
     username,
     email,
     password: hashedPassword,
-    roles: [role],
+    roles,
     resetToken: null,
     tokenExpirationDate: undefined,
   });
 
   try {
     await newUser.save();
-    if (role === Roles.AGENT) {
-      // TODO: Publish UserCreatedEvent
+    const agentRole = roles.includes(Roles.AGENT);
+    if (agentRole) {
+      await new UserCreatedPublisher(natsWraper.client).publish({
+        id: newUser.id,
+        email: newUser.email,
+        roles: newUser.roles,
+      });
     }
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
@@ -292,7 +303,11 @@ const modifyUserRole = async (
   try {
     await foundUser.save();
     if (userRole === Roles.AGENT) {
-      //TODO: Publish UserUpdatedEvent
+      await new UserUpdatedPublisher(natsWraper.client).publish({
+        id: foundUser.id,
+        email: foundUser.email,
+        roles: foundUser.roles,
+      });
     }
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));

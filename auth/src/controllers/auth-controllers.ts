@@ -72,6 +72,7 @@ const addUsers = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const signUp = async (req: Request, res: Response, next: NextFunction) => {
+  // TODO: Should be through a magic link sent via mail
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return next(new HttpError('Invalid inputs', 422));

@@ -55,7 +55,8 @@ const addUsers = async (req: Request, res: Response, next: NextFunction) => {
 
   try {
     await newUser.save();
-    const agentRole = roles.includes(Roles.AGENT);
+    const agentRole =
+      roles.includes(Roles.AGENT) || roles.includes(Roles.ADMIN);
     if (agentRole) {
       await new UserCreatedPublisher(natsWraper.client).publish({
         id: newUser.id,
@@ -120,6 +121,14 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     return next(new HttpError('An error occured, try again', 500));
   }
+
+  try {
+    await new UserCreatedPublisher(natsWraper.client).publish({
+      id: newUser.id,
+      email: newUser.email,
+      roles: newUser.roles,
+    });
+  } catch (error) {}
 
   res.status(201).json({
     message: 'Sign Up successful',
@@ -302,7 +311,7 @@ const modifyUserRole = async (
   foundUser.roles.push(userRole);
   try {
     await foundUser.save();
-    if (userRole === Roles.AGENT) {
+    if (userRole === Roles.AGENT || userRole === Roles.ADMIN) {
       await new UserUpdatedPublisher(natsWraper.client).publish({
         id: foundUser.id,
         email: foundUser.email,

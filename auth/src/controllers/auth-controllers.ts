@@ -54,6 +54,8 @@ const addUsers = async (req: Request, res: Response, next: NextFunction) => {
     tokenExpirationDate: undefined,
   });
 
+  // send mail to confirm account and change password therefore
+
   try {
     await newUser.save();
     const agentRole =

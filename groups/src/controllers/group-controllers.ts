@@ -134,8 +134,9 @@ const removeUsersFromGroup = async (
 
 const fetchGroups = async (req: Request, res: Response, next: NextFunction) => {
   let foundGroups;
+  const populateQuery = [{ path: 'user', select: ['email', 'userId'] }];
   try {
-    foundGroups = await Group.find().exec();
+    foundGroups = await Group.find().populate(populateQuery).exec();
   } catch (error) {
     return next(
       new HttpError(

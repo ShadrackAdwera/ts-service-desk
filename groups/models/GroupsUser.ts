@@ -28,7 +28,7 @@ interface UserModel extends Model<UserDoc> {
 const groupSchema = new Schema(
   {
     title: { type: String, required: true },
-    createdBy: { type: Schema.Types.ObjectId },
+    createdBy: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
     users: [{ type: Schema.Types.ObjectId, ref: 'user' }],
   },
   { timestamps: true, toJSON: { getters: true } }

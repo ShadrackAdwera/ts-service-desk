@@ -78,6 +78,7 @@ const addUsersToGroup = async (
     );
   }
   //publish update to category
+  // send mail to users configured
   res.status(200).json({ message: 'The users have been added to this group' });
 };
 
@@ -120,6 +121,7 @@ const removeUsersFromGroup = async (
     );
   }
   //publish update to category
+  // send mail to users removed
   res
     .status(200)
     .json({ message: 'The users have been removed from the group' });
@@ -130,4 +132,19 @@ const removeUsersFromGroup = async (
 //     // otherwise delete the group asap
 // }
 
-export { createGroup, addUsersToGroup, removeUsersFromGroup };
+const fetchGroups = async (req: Request, res: Response, next: NextFunction) => {
+  let foundGroups;
+  try {
+    foundGroups = await Group.find().exec();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+  res.status(200).json({ count: foundGroups.length, groups: foundGroups });
+};
+
+export { createGroup, addUsersToGroup, removeUsersFromGroup, fetchGroups };

@@ -17,3 +17,10 @@ spec:
                 name: auth-service
                 port:
                   number: 5000
+          - path: /api/groups/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: group-service
+                port:
+                  number: 5001

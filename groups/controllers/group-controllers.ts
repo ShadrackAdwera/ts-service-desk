@@ -48,6 +48,7 @@ const addUsersToGroup = async (
   res: Response,
   next: NextFunction
 ) => {
+  // TODO: Use middleware to get admin role to perform this action
   const groupId = req.params;
   const { users }: { users: string[] } = req.body;
   let foundGroup;
@@ -66,6 +67,67 @@ const addUsersToGroup = async (
   for (const userId of users) {
     foundGroup.users.push(userId);
   }
+  try {
+    await foundGroup.save();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
   //publish update to category
   res.status(200).json({ message: 'The users have been added to this group' });
 };
+
+const removeUsersFromGroup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // TODO: Use middleware to get admin role to perform this action
+  const groupId = req.params;
+  const { users }: { users: string[] } = req.body;
+  let foundGroup;
+  try {
+    foundGroup = await Group.findOne({ id: groupId }).exec();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+  if (!foundGroup)
+    return next(new HttpError('This group does not exist!', 422));
+  for (const userId of users) {
+    const usersInGroup = foundGroup.users;
+    const updatedUsers = usersInGroup.filter(
+      (userInGroup) => userInGroup !== userId
+    );
+    foundGroup.users = updatedUsers;
+  }
+  try {
+    await foundGroup.save();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+  //publish update to category
+  res
+    .status(200)
+    .json({ message: 'The users have been removed from the group' });
+};
+
+// const removeGroup = () => {
+//     // send a delete event to schedule delete of the group - if the group is actively involed in pending tickets
+//     // otherwise delete the group asap
+// }
+
+export { createGroup, addUsersToGroup, removeUsersFromGroup };

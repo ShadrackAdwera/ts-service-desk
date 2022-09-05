@@ -6,6 +6,10 @@ import { Group, User } from '../models/GroupsUser';
 
 const createGroup = async (req: Request, res: Response, next: NextFunction) => {
   // TODO: Use middleware to get admin role to perform this action
+  const isError = validationResult(req);
+  if (!isError.isEmpty()) {
+    return next(new HttpError('Provide the title of the group', 422));
+  }
   const { title }: { title: string } = req.body;
   let foundGroup;
   try {
@@ -138,6 +142,7 @@ const fetchGroups = async (req: Request, res: Response, next: NextFunction) => {
   try {
     foundGroups = await Group.find().populate(populateQuery).exec();
   } catch (error) {
+    console.log(error);
     return next(
       new HttpError(
         error instanceof Error ? error.message : 'An error occured',

@@ -37,6 +37,27 @@
 | GroupCreated    | Groups                                    | Category                                                    |
 | GroupUpdated    | Groups                                    | Category                                                    |
 
+## Routes
+
+1. Auth Service
+
+| Route                                              | Purpose                                    | Verb        |
+| -------------------------------------------------- | ------------------------------------------ | ----------- |
+| <code>/api/auth/sign-up</code>                     | Sign Up                                    | <code>POST  |
+| <code>/api/auth/login</code>                       | Login                                      | <code>POST  |
+| <code>/api/auth/request-reset-token</code>         | Request Password Reset Link on mail        | <code>POST  |
+| <code>/api/auth//reset-password/:resetToken</code> | Resets password with the provided password | <code>PATCH |
+| <code>/api/auth//modify-user/:userId</code>        | Modify User Role by Admin                  | <code>PATCH |
+
+2. Groups Service
+
+| Route                                       | Purpose                   | Verb        |
+| ------------------------------------------- | ------------------------- | ----------- |
+| <code>/api/groups</code>                    | Fetch Groups              | <code>GET   |
+| <code>/api/groups/new</code>                | Create New Group          | <code>POST  |
+| <code>/api/groups/:groupId/add-users</code> | Add Users to a Group      | <code>PATCH |
+| <code>/api/groups/:groupId/add-users</code> | Remove Users from a Group | <code>PATCH |
+
 ## TECHNOLOGIES USED
 
 - Node js

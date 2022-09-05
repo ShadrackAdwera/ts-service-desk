@@ -50,6 +50,14 @@
 
 _To update the README as the application continues._
 
+## Manual Acceptance Testing
+
+- Sign up (should be via a magic link on mail - default account is admin on sign up ) to settle for POSTMAN for now.
+- Check if event was emitted to create a new user in Group Service.
+- This admin account should be able to add more users into the system ( default password - 123456, should be changed on login).
+- Users with Agent roles when added by this admin, trigger and event emmitted by Auth Service, listened to by Groups Service.
+- Create a new group - (add users to this group from the duplicated DB found in groups service).
+
 ## License
 
 #### Copyright (c) 2022 Shadrack Adwera

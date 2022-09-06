@@ -27,7 +27,7 @@ spec:
           '2',
           '-SD',
           '-cid',
-          'tasks']
+          'service-desk']
 ---
 apiVersion: v1
 kind: Service

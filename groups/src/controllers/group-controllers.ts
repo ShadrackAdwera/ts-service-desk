@@ -68,6 +68,26 @@ const addUsersToGroup = async (
   }
   if (!foundGroup)
     return next(new HttpError('This group does not exist!', 422));
+  let foundUsers: string[] = [];
+  //refactor this
+  for (const userId of users) {
+    for (const usr of foundGroup.users) {
+      if (usr.toString() === userId) {
+        foundUsers.push(userId);
+      }
+    }
+  }
+  if (foundUsers.length > 0) {
+    return next(
+      new HttpError('User can only be added once to this group', 403)
+    );
+  }
+  //TODO: Check if these users exist.
+  for (const userId of users) {
+    for (const usr of foundGroup.users) {
+    }
+  }
+
   for (const userId of users) {
     foundGroup.users.push(userId);
   }
@@ -138,9 +158,11 @@ const removeUsersFromGroup = async (
 
 const fetchGroups = async (req: Request, res: Response, next: NextFunction) => {
   let foundGroups;
-  const populateQuery = [{ path: 'user', select: ['email', 'userId'] }];
   try {
-    foundGroups = await Group.find().populate(populateQuery).exec();
+    foundGroups = await Group.find()
+      .populate({ path: 'users', select: 'email userId' })
+      .populate({ path: 'createdBy', select: 'email userId' })
+      .exec();
   } catch (error) {
     console.log(error);
     return next(

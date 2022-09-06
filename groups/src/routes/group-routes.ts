@@ -11,14 +11,10 @@ import {
 
 const router = Router();
 // TODO: Replace the middleware with admin middleware
-router.get('/', checkAuth, fetchGroups);
-router.post(
-  '/new',
-  checkAuth,
-  [body('title').trim().isLength({ min: 3 })],
-  createGroup
-);
-router.patch('/:groupId/add-users', checkAuth, addUsersToGroup);
-router.patch('/:groupId/remove-users', checkAuth, removeUsersFromGroup);
+router.use(checkAuth);
+router.get('', fetchGroups);
+router.post('/new', [body('title').trim().isLength({ min: 3 })], createGroup);
+router.patch('/:groupId/add-users', addUsersToGroup);
+router.patch('/:groupId/remove-users', removeUsersFromGroup);
 
 export { router as groupRoutes };

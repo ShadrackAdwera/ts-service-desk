@@ -26,6 +26,11 @@ spec:
                   fieldPath: metadata.name
             - name: NATS_URI
               value: 'http://nats-service:4222'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY 
 
 ---
 

@@ -39,7 +39,7 @@ const start = async () => {
     process.on('SIGTERM', () => natsWraper.client.close());
 
     await mongoose.connect(process.env.MONGO_URI!);
-    app.listen(5000);
+    app.listen(5001);
     console.log('Connected to Groups Service, listening on PORT: 5001');
   } catch (error) {
     console.log(error);

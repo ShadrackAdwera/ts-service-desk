@@ -4,10 +4,6 @@ import { app } from './app';
 import { natsWraper } from '@adwesh/common';
 import { UserCreatedListener } from './events/listeners/UserCreatedListener';
 
-if (!process.env.JWT_KEY) {
-  throw new Error('JWT is not defined!');
-}
-
 if (!process.env.MONGO_URI) {
   throw new Error('MONGO URI is not defined!');
 }

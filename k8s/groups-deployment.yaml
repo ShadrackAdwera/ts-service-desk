@@ -19,18 +19,13 @@ spec:
             - name: MONGO_URI
               value: 'mongodb://group-mongo-service:27017/group'
             - name: NATS_CLUSTER_ID
-              value: 'tasks'
+              value: 'service-desk'
             - name: NATS_CLIENT_ID
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
             - name: NATS_URI
               value: 'http://nats-service:4222'
-            - name: JWT_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: JWT_KEY 
 
 ---
 

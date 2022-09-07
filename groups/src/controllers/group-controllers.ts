@@ -27,7 +27,19 @@ const createGroup = async (req: Request, res: Response, next: NextFunction) => {
       new HttpError('A group with this name exists, use another name', 422)
     );
   const userId = req.user?.userId;
+  let foundUser;
   if (!userId) return next(new HttpError('You are not authenticated', 401));
+  try {
+    foundUser = await User.findOne({ userId }).exec();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'Internal server error',
+        500
+      )
+    );
+  }
+  if (!foundUser) return next(new HttpError('You are not authenticated', 401));
   const newGroup = new Group({
     title,
     createdBy: userId,

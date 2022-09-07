@@ -28,8 +28,8 @@ interface UserModel extends Model<UserDoc> {
 const groupSchema = new Schema(
   {
     title: { type: String, required: true },
-    createdBy: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
-    users: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+    createdBy: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+    users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   },
   { timestamps: true, toJSON: { getters: true } }
 );
@@ -47,8 +47,8 @@ groupSchema.plugin(updateIfCurrentPlugin);
 userSchema.set('versionKey', 'version');
 userSchema.plugin(updateIfCurrentPlugin);
 
-const Group = model<GroupDoc, GroupModel>('group', groupSchema);
-const User = model<UserDoc, UserModel>('user', userSchema);
+const Group = model<GroupDoc, GroupModel>('Group', groupSchema);
+const User = model<UserDoc, UserModel>('User', userSchema);
 
 export { Group };
 export { User };

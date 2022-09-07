@@ -37,6 +37,6 @@ const userSchema = new Schema(
 userSchema.set('versionKey', 'version');
 userSchema.plugin(updateIfCurrentPlugin);
 
-const User = model<UserDoc, UserModel>('user', userSchema);
+const User = model<UserDoc, UserModel>('User', userSchema);
 
 export { User };

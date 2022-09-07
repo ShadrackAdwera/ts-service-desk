@@ -42,7 +42,7 @@ const createGroup = async (req: Request, res: Response, next: NextFunction) => {
   if (!foundUser) return next(new HttpError('You are not authenticated', 401));
   const newGroup = new Group({
     title,
-    createdBy: userId,
+    createdBy: foundUser._id,
   });
 
   try {
@@ -95,10 +95,10 @@ const addUsersToGroup = async (
     );
   }
   //TODO: Check if these users exist.
-  for (const userId of users) {
-    for (const usr of foundGroup.users) {
-    }
-  }
+  // for (const userId of users) {
+  //   for (const usr of foundGroup.users) {
+  //   }
+  // }
 
   for (const userId of users) {
     foundGroup.users.push(userId);
@@ -170,11 +170,12 @@ const removeUsersFromGroup = async (
 
 const fetchGroups = async (req: Request, res: Response, next: NextFunction) => {
   let foundGroups;
+  const populateQuery = [
+    { path: 'users', select: ['email', 'userId'] },
+    { path: 'createdBy', select: ['email', 'userId'] },
+  ];
   try {
-    foundGroups = await Group.find()
-      .populate({ path: 'users', select: 'email userId' })
-      .populate({ path: 'createdBy', select: 'email userId' })
-      .exec();
+    foundGroups = await Group.find().populate(populateQuery).exec();
   } catch (error) {
     console.log(error);
     return next(
@@ -187,4 +188,30 @@ const fetchGroups = async (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ count: foundGroups.length, groups: foundGroups });
 };
 
-export { createGroup, addUsersToGroup, removeUsersFromGroup, fetchGroups };
+const fetchGroupUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let foundUsers;
+  try {
+    foundUsers = await User.find().exec();
+  } catch (error) {
+    console.log(error);
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+  res.status(200).json({ count: foundUsers.length, users: foundUsers });
+};
+
+export {
+  createGroup,
+  addUsersToGroup,
+  removeUsersFromGroup,
+  fetchGroups,
+  fetchGroupUsers,
+};

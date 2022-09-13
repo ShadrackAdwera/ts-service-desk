@@ -47,6 +47,7 @@ const categorySchema = new Schema(
     groups: [
       {
         type: Schema.Types.ObjectId,
+        ref: 'group',
       },
     ],
   },

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import { HttpError } from '@adwesh/common';
 
-import { Category, Group } from '../models/Category';
+import { Category } from '../models/Category';
 
 const createCategory = async (
   req: Request,
@@ -33,7 +33,12 @@ const createCategory = async (
   try {
     foundCategory = await Category.findOne({ title }).exec();
   } catch (error) {
-    return next(new HttpError('An error occured, try again', 500));
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
   }
 
   if (foundCategory)
@@ -51,8 +56,36 @@ const createCategory = async (
   try {
     await newCategory.save();
   } catch (error) {
-    return next(new HttpError('An error occured, try again', 500));
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
   }
 
   res.status(201).json({ message: 'Category created', category: newCategory });
 };
+
+const fetchCategories = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let categories;
+  const populateQuery = [{ path: 'group', select: ['title'] }];
+
+  try {
+    categories = await Category.find().populate(populateQuery).exec();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+  res.status(200).json({ count: categories.length, categories });
+};
+
+export { createCategory, fetchCategories };

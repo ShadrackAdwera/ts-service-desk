@@ -7,6 +7,10 @@
 
 - GCP
 
+## Architecture
+
+![architecture](./service-desk.drawio.png)
+
 ## SERVICES
 
 | Service          | Description                                                                                                    | CluterIP Port |

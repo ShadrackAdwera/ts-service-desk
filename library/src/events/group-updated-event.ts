@@ -1,6 +1,6 @@
 import { Subjects } from '../shared/Subjects';
 
-export interface GroupCreatedEvent {
+export interface GroupUpdatedEvent {
   subject: Subjects.GroupUpdated;
   data: {
     title: string;

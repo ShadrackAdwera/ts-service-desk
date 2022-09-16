@@ -25,6 +25,7 @@ interface CategoryModel extends Model<CategoryDoc> {
 interface GroupDoc extends Document {
   title: string;
   users: string[];
+  groupId: string;
   version: number;
 }
 
@@ -57,6 +58,7 @@ const categorySchema = new Schema(
 const groupSchema = new Schema(
   {
     title: { type: String, required: true },
+    groupId: { type: Schema.Types.ObjectId },
     users: [{ type: Schema.Types.ObjectId }],
   },
   { timestamps: true, toJSON: { getters: true } }

@@ -27,6 +27,7 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
       msg.ack();
     }
     const newUser = new User({
+      _id: data.id,
       userId: data.id,
       email: data.email,
     });

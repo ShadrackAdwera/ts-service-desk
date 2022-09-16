@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import { Group, User } from '../models/GroupsUser';
 import { GroupCreatedPublisher } from '../events/publishers/GroupCreatedPublisher';
+import { GroupUpdatedPublisher } from '../events/publishers/GroupUpdatedPublisher';
 
 const createGroup = async (req: Request, res: Response, next: NextFunction) => {
   // TODO: Use middleware to get admin role to perform this action
@@ -122,6 +123,20 @@ const addUsersToGroup = async (
     );
   }
   //publish update to category
+  try {
+    await new GroupUpdatedPublisher(natsWraper.client).publish({
+      title: foundGroup.title,
+      id: foundGroup._id,
+      users: foundGroup.users,
+    });
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
   // send mail to users configured
   res.status(200).json({ message: 'The users have been added to this group' });
 };

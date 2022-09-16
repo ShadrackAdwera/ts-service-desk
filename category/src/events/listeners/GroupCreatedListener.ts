@@ -4,7 +4,7 @@ import { HttpError } from '@adwesh/common';
 
 import { Group } from '../../models/Category';
 
-const CATQGROUPNAME = 'category-service';
+export const CATQGROUPNAME = 'category-service';
 
 export class GroupCreatedListener extends Listener<GroupCreatedEvent> {
   subject: Subjects.GroupCreated = Subjects.GroupCreated;

@@ -21,4 +21,4 @@ router.post(
   createCategory
 );
 
-export { router as categoryRouter };
+export { router as categoryRoutes };

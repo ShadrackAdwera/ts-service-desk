@@ -24,3 +24,10 @@ spec:
                 name: group-service
                 port:
                   number: 5001
+          - path: /api/category/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: category-service
+                port:
+                  number: 5002

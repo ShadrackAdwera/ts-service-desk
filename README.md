@@ -29,9 +29,9 @@
 
 | Event           | Published By (Service)                    | Listened to By (Service)                                    |
 | --------------- | ----------------------------------------- | ----------------------------------------------------------- |
-| UserCreated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned             |
-| UserDeleted     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned             |
-| UserUpdated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned             |
+| UserCreated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets    |
+| UserDeleted     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets    |
+| UserUpdated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets    |
 | CategoryCreated | Category                                  | Tickets                                                     |
 | CategoryUpdated | Category                                  | Tickets                                                     |
 | CategoryDeleted | Category                                  | Tickets                                                     |
@@ -61,6 +61,21 @@
 | <code>/api/groups/new</code>                | Create New Group          | <code>POST  |
 | <code>/api/groups/:groupId/add-users</code> | Add Users to a Group      | <code>PATCH |
 | <code>/api/groups/:groupId/add-users</code> | Remove Users from a Group | <code>PATCH |
+
+3. Categories Service
+
+| Route                                  | Purpose             | Verb         |
+| -------------------------------------- | ------------------- | ------------ |
+| <code>/api/category</code>             | Fetch Categories    | <code>GET    |
+| <code>/api/category/new</code>         | Create New Category | <code>POST   |
+| <code>/api/category/:categoryId</code> | Update a category   | <code>PATCH  |
+| <code>/api/category/:categoryId</code> | Delete a category   | <code>DELETE |
+
+**_Ticket Assignment is attached to a category, the assignment options can be either be:_**
+
+- Yes, assign to any user.
+- Yes, assign to specific users - specific users are found in the group attached to a category.
+- No - Auto assigment is not perfomed in this category. Tickets are manually assigned
 
 ## TECHNOLOGIES USED
 

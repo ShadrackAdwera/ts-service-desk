@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { app } from './app';
 import { natsWraper } from '@adwesh/common';
 import { GroupCreatedListener } from './events/listeners/GroupCreatedListener';
+import { GroupUpdatedListener } from './events/listeners/GroupUpdatedListener';
 
 if (!process.env.MONGO_URI) {
   throw new Error('MONGO URI is not defined!');
@@ -34,6 +35,7 @@ const start = async () => {
     });
 
     new GroupCreatedListener(natsWraper.client).listen();
+    new GroupUpdatedListener(natsWraper.client).listen();
 
     process.on('SIGINT', () => natsWraper.client.close());
     process.on('SIGTERM', () => natsWraper.client.close());

@@ -31,6 +31,7 @@ export class GroupUpdatedListener extends Listener<GroupUpdatedEvent> {
     foundGroup.users = data.users;
     try {
       await foundGroup.save();
+      msg.ack();
     } catch (error) {
       console.log(error);
       throw new HttpError(

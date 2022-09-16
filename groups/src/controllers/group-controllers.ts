@@ -1,8 +1,9 @@
-import { HttpError } from '@adwesh/common';
+import { HttpError, natsWraper } from '@adwesh/common';
 import { validationResult } from 'express-validator';
 import { Request, Response, NextFunction } from 'express';
 
 import { Group, User } from '../models/GroupsUser';
+import { GroupCreatedPublisher } from '../events/publishers/GroupCreatedPublisher';
 
 const createGroup = async (req: Request, res: Response, next: NextFunction) => {
   // TODO: Use middleware to get admin role to perform this action
@@ -55,6 +56,13 @@ const createGroup = async (req: Request, res: Response, next: NextFunction) => {
       )
     );
   }
+  try {
+    await new GroupCreatedPublisher(natsWraper.client).publish({
+      title: newGroup.title,
+      id: newGroup._id,
+      users: newGroup.users,
+    });
+  } catch (error) {}
   // publish to category
   res.status(201).json({ message: `Group ${newGroup.title} has been created` });
 };

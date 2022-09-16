@@ -1,6 +1,6 @@
 import { Schema, model, Document, Model } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
-import { PRIORITIES } from '@adwesh/service-desk';
+import { PRIORITIES, ASSIGNMENT_OPTIONS } from '@adwesh/service-desk';
 
 const ONE_HOUR = 60 * 60 * 1000;
 
@@ -45,7 +45,12 @@ const categorySchema = new Schema(
       enum: Object.values(PRIORITIES),
       default: PRIORITIES.LOW,
     },
-    assignmentMatrix: { type: String },
+    assignmentMatrix: {
+      type: String,
+      required: true,
+      enum: Object.values(ASSIGNMENT_OPTIONS),
+      default: ASSIGNMENT_OPTIONS.NO,
+    },
     defaultDueDate: {
       type: Date,
       required: true,

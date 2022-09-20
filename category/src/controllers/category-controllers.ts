@@ -4,6 +4,8 @@ import { HttpError } from '@adwesh/common';
 
 import { Category } from '../models/Category';
 
+const convertToMillis = (hours: number): number => hours * 60 * 1000;
+
 const createCategory = async (
   req: Request,
   res: Response,
@@ -24,7 +26,7 @@ const createCategory = async (
     description: string;
     priority: number;
     assigmentMatrix: string;
-    defaultDueDate: Date;
+    defaultDueDate: number;
     groups: string[];
   } = req.body;
 
@@ -50,7 +52,7 @@ const createCategory = async (
     priority,
     groups,
     assigmentMatrix,
-    defaultDueDate,
+    defaultDueDate: convertToMillis(defaultDueDate),
   });
 
   try {

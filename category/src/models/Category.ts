@@ -9,7 +9,7 @@ interface CategoryDoc extends Document {
   description: string;
   priority: number;
   assigmentMatrix: string;
-  defaultDueDate: Date;
+  defaultDueDate: number;
   groups: string[];
   version: number;
 }
@@ -19,7 +19,7 @@ interface CategoryModel extends Model<CategoryDoc> {
   description: string;
   priority: number;
   assigmentMatrix: string;
-  defaultDueDate: Date;
+  defaultDueDate: number;
   groups: string[];
 }
 
@@ -52,9 +52,9 @@ const categorySchema = new Schema(
       default: ASSIGNMENT_OPTIONS.NO,
     },
     defaultDueDate: {
-      type: Date,
+      type: Number,
       required: true,
-      default: Date.now() + ONE_HOUR,
+      default: ONE_HOUR,
     },
     groups: [
       {

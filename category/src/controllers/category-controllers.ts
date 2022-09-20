@@ -75,7 +75,7 @@ const fetchCategories = async (
   next: NextFunction
 ) => {
   let categories;
-  const populateQuery = [{ path: 'group', select: ['title'] }];
+  const populateQuery = [{ path: 'groups', select: ['title'] }];
 
   try {
     categories = await Category.find().populate(populateQuery).exec();

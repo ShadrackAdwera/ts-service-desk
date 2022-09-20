@@ -40,7 +40,7 @@ const categorySchema = new Schema(
     title: { type: String, required: true },
     description: { type: String },
     priority: {
-      type: Number,
+      type: String,
       required: true,
       enum: Object.values(PRIORITIES),
       default: PRIORITIES.LOW,

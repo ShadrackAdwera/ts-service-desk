@@ -15,8 +15,8 @@ router.post(
   '/new',
   [
     body('title').trim().isLength({ min: 3 }),
-    body('priority').isNumeric(),
-    body('defaultDueDate').isISO8601(),
+    body('priority').trim().isLength({ min: 3 }),
+    body('defaultDueDate').isNumeric(),
   ],
   createCategory
 );

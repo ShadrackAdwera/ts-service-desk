@@ -1,4 +1,3 @@
-import { ASSIGNMENT_OPTIONS } from '../shared/AssignmentOptions';
 import { Subjects } from '../shared/Subjects';
 
 export interface CategoryUpdatedEvent {
@@ -7,8 +6,8 @@ export interface CategoryUpdatedEvent {
     id: string;
     title: string;
     priority: string;
-    assigmentMatrix: ASSIGNMENT_OPTIONS;
-    defaultDueDate: string;
+    assigmentMatrix: string;
+    defaultDueDate: number;
     groups: string[];
   };
 }

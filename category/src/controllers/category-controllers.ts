@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import { HttpError } from '@adwesh/common';
+import { HttpError, natsWraper } from '@adwesh/common';
 
 import { Category } from '../models/Category';
+import { CategoryCreatedPublisher } from '../events/publishers/CategoryCreatedPublisher';
 
 const convertToMillis = (hours: number): number => hours * 60 * 1000;
 
@@ -24,7 +25,7 @@ const createCategory = async (
   }: {
     title: string;
     description: string;
-    priority: number;
+    priority: string;
     assigmentMatrix: string;
     defaultDueDate: number;
     groups: string[];
@@ -65,7 +66,23 @@ const createCategory = async (
       )
     );
   }
-
+  try {
+    await new CategoryCreatedPublisher(natsWraper.client).publish({
+      id: newCategory._id,
+      title: newCategory.title,
+      priority: newCategory.priority,
+      assigmentMatrix: newCategory.assigmentMatrix,
+      defaultDueDate: newCategory.defaultDueDate,
+      groups: newCategory.groups,
+    });
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
   res.status(201).json({ message: 'Category created', category: newCategory });
 };
 

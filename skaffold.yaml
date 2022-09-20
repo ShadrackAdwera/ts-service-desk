@@ -34,3 +34,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: us.gcr.io/servicedesk-dev-361311/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

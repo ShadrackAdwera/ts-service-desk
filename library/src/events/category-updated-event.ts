@@ -6,7 +6,7 @@ export interface CategoryUpdatedEvent {
   data: {
     id: string;
     title: string;
-    priority: number;
+    priority: string;
     assigmentMatrix: ASSIGNMENT_OPTIONS;
     defaultDueDate: string;
     groups: string[];

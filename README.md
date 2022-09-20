@@ -27,19 +27,19 @@
 
 ## EVENTS TO BE PUBLISHED AND TO BE LISTENED TO
 
-| Event           | Published By (Service)                    | Listened to By (Service)                                    |
-| --------------- | ----------------------------------------- | ----------------------------------------------------------- |
-| UserCreated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets    |
-| UserDeleted     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets    |
-| UserUpdated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets    |
-| CategoryCreated | Category                                  | Tickets                                                     |
-| CategoryUpdated | Category                                  | Tickets                                                     |
-| CategoryDeleted | Category                                  | Tickets                                                     |
-| TicketCreated   | Ticket                                    | Auto Assignment                                             |
-| TicketUpdated   | Ticket, Auto Assignment,<br /> Escalation | Ticket, Auto Assignment,<br /> Escalation, Tickets Assigned |
-| TicketDeleted   | Ticket                                    | Ticket, Auto Assignment,<br /> Escalation, Tickets Assigned |
-| GroupCreated    | Groups                                    | Category                                                    |
-| GroupUpdated    | Groups                                    | Category                                                    |
+| Event           | Published By (Service)                    | Listened to By (Service)                                 |
+| --------------- | ----------------------------------------- | -------------------------------------------------------- |
+| UserCreated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets |
+| UserDeleted     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets |
+| UserUpdated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets |
+| CategoryCreated | Category                                  | Tickets                                                  |
+| CategoryUpdated | Category                                  | Tickets                                                  |
+| CategoryDeleted | Category                                  | Tickets                                                  |
+| TicketCreated   | Ticket                                    | Auto Assignment                                          |
+| TicketUpdated   | Ticket, Auto Assignment,<br /> Escalation | Auto Assignment,<br /> Escalation, Tickets Assigned      |
+| TicketDeleted   | Ticket                                    | Auto Assignment,<br /> Escalation, Tickets Assigned      |
+| GroupCreated    | Groups                                    | Category                                                 |
+| GroupUpdated    | Groups                                    | Category                                                 |
 
 ## Routes
 
@@ -70,6 +70,15 @@
 | <code>/api/category/new</code>         | Create New Category | <code>POST   |
 | <code>/api/category/:categoryId</code> | Update a category   | <code>PATCH  |
 | <code>/api/category/:categoryId</code> | Delete a category   | <code>DELETE |
+
+4. Tickets Service
+
+| Route                                | Purpose           | Verb         |
+| ------------------------------------ | ----------------- | ------------ |
+| <code>/api/tickets</code>            | Fetch Tickets     | <code>GET    |
+| <code>/api/tickets/new</code>        | Create New Ticket | <code>POST   |
+| <code>/api/tickets/:ticketId</code>  | Update a ticket   | <code>PATCH  |
+| <code>/api/category/:ticketId</code> | Delete a ticket   | <code>DELETE |
 
 **_Ticket Assignment is attached to a category, the assignment options can be either be:_**
 

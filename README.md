@@ -97,6 +97,8 @@ _To update the README as the application continues._
 - This admin account should be able to add more users into the system ( default password - 123456, should be changed on login).
 - Users with Agent roles when added by this admin, Auth Service publishes UserCreatedEvent, which is listened to by Groups Service.
 - Create a new group - (add users to this group from the duplicated DB found in groups service).
+- Create / Update group emit a GroupCreated / GroupUpdated event to Category Service.
+- Create / Update a category (CategoryCreated / CategoryUpdated event(s)) to be emmitted to tickets service.
 
 ## License
 

@@ -31,3 +31,10 @@ spec:
                 name: category-service
                 port:
                   number: 5002
+          - path: /api/tickets/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-service
+                port:
+                  number: 5003

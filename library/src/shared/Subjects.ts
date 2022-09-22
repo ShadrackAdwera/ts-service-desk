@@ -10,4 +10,6 @@ export enum Subjects {
   TicketDeleted = 'ticket:deleted',
   GroupCreated = 'group:created',
   GroupUpdated = 'group:updated',
+  EscalationMatrixCreated = 'escalation:matrix:created',
+  EscalationMatrixUpdated = 'escalation:matrix:updated',
 }

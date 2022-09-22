@@ -35,7 +35,7 @@
 | CategoryCreated | Category                                  | Tickets                                                  |
 | CategoryUpdated | Category                                  | Tickets                                                  |
 | CategoryDeleted | Category                                  | Tickets                                                  |
-| TicketCreated   | Ticket                                    | Auto Assignment                                          |
+| TicketCreated   | Ticket                                    | Auto Assignment, Tickets Assigned                        |
 | TicketUpdated   | Ticket, Auto Assignment,<br /> Escalation | Auto Assignment,<br /> Escalation, Tickets Assigned      |
 | TicketDeleted   | Ticket                                    | Auto Assignment,<br /> Escalation, Tickets Assigned      |
 | GroupCreated    | Groups                                    | Category                                                 |

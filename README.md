@@ -27,19 +27,21 @@
 
 ## EVENTS TO BE PUBLISHED AND TO BE LISTENED TO
 
-| Event           | Published By (Service)                    | Listened to By (Service)                                 |
-| --------------- | ----------------------------------------- | -------------------------------------------------------- |
-| UserCreated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets |
-| UserDeleted     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets |
-| UserUpdated     | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets |
-| CategoryCreated | Category                                  | Tickets                                                  |
-| CategoryUpdated | Category                                  | Tickets                                                  |
-| CategoryDeleted | Category                                  | Tickets                                                  |
-| TicketCreated   | Ticket                                    | Auto Assignment, Tickets Assigned                        |
-| TicketUpdated   | Ticket, Auto Assignment,<br /> Escalation | Auto Assignment,<br /> Escalation, Tickets Assigned      |
-| TicketDeleted   | Ticket                                    | Auto Assignment,<br /> Escalation, Tickets Assigned      |
-| GroupCreated    | Groups                                    | Category                                                 |
-| GroupUpdated    | Groups                                    | Category                                                 |
+| Event                   | Published By (Service)                    | Listened to By (Service)                                 |
+| ----------------------- | ----------------------------------------- | -------------------------------------------------------- |
+| UserCreated             | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets |
+| UserDeleted             | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets |
+| UserUpdated             | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets |
+| CategoryCreated         | Category                                  | Tickets                                                  |
+| CategoryUpdated         | Category                                  | Tickets                                                  |
+| CategoryDeleted         | Category                                  | Tickets                                                  |
+| TicketCreated           | Ticket                                    | Auto Assignment, Tickets Assigned                        |
+| TicketUpdated           | Ticket, Auto Assignment,<br /> Escalation | Auto Assignment,<br /> Escalation, Tickets Assigned      |
+| TicketDeleted           | Ticket                                    | Auto Assignment,<br /> Escalation, Tickets Assigned      |
+| GroupCreated            | Groups                                    | Category                                                 |
+| GroupUpdated            | Groups                                    | Category                                                 |
+| EscalationMatrixCreated | Escalation                                | Tickets                                                  |
+| EscalationMatrixUpdated | Escalation                                | Tickets                                                  |
 
 ## Routes
 

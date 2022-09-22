@@ -11,3 +11,4 @@ export * from './shared/Subjects';
 export * from './shared/Roles';
 export * from './shared/AssignmentOptions';
 export * from './shared/Priorities';
+export * from './shared/TicketStatus';

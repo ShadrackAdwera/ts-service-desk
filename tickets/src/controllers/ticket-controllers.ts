@@ -100,7 +100,15 @@ const createTicket = async (
       )
     );
   }
+
+  // emit event
+
   res
     .status(201)
     .json({ message: 'Your ticket has been successfully raised.' });
 };
+
+//TODO: Endpoints remaining
+//update ticket
+//reply to ticket
+//select default escalation matrix

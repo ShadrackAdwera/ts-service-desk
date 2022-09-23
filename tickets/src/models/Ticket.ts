@@ -112,7 +112,7 @@ const ticketSchema = new Schema(
       enum: Object.values(TicketStatus),
       default: TicketStatus.OPEN,
     },
-    replies: { type: Schema.Types.ObjectId, ref: 'reply' },
+    replies: [{ type: Schema.Types.ObjectId, ref: 'reply' }],
     escalationMatrix: { type: Schema.Types.ObjectId, required: true },
   },
   { timestamps: true, toJSON: { getters: true } }

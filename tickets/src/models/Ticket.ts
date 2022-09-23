@@ -38,6 +38,17 @@ interface ReplyModel extends Model<ReplyDoc> {
   createdBy: string;
 }
 
+interface EscalationMatrixDoc extends Document {
+  title: string;
+  selected: string;
+  version: number;
+}
+
+interface EscalationMatrixModel extends Model<EscalationMatrixDoc> {
+  title: string;
+  selected: string;
+}
+
 interface TicketDoc extends Document {
   title: string;
   description: string;
@@ -99,6 +110,19 @@ const replySchema = new Schema(
   { timestamps: true, toJSON: { getters: true } }
 );
 
+const escalationMatrixSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    selected: {
+      type: String,
+      required: true,
+      enum: ['yes', 'no'],
+      default: 'no',
+    },
+  },
+  { timestamps: true, toJSON: { getters: true } }
+);
+
 const ticketSchema = new Schema(
   {
     title: { type: String, required: true },
@@ -124,9 +148,15 @@ replySchema.set('versionKey', 'version');
 replySchema.plugin(updateIfCurrentPlugin);
 ticketSchema.set('versionKey', 'version');
 ticketSchema.plugin(updateIfCurrentPlugin);
+escalationMatrixSchema.set('versionKey', 'version');
+escalationMatrixSchema.plugin(updateIfCurrentPlugin);
 
 const Category = model<CategoryDoc, CategoryModel>('category', categorySchema);
 const Reply = model<ReplyDoc, ReplyModel>('reply', replySchema);
 const Ticket = model<TicketDoc, TicketModel>('ticket', ticketSchema);
+const EscalationMatrix = model<EscalationMatrixDoc, EscalationMatrixModel>(
+  'escalation',
+  escalationMatrixSchema
+);
 
-export { Category, Reply, Ticket };
+export { Category, Reply, Ticket, EscalationMatrix };

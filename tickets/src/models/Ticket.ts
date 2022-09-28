@@ -56,7 +56,7 @@ interface TicketDoc extends Document {
   createdBy: string;
   assignedTo: string;
   status: string;
-  replies: string;
+  replies: string[];
   escalationMatrix: string;
   version: number;
 }
@@ -68,7 +68,7 @@ interface TicketModel extends Model<TicketDoc> {
   createdBy: string;
   assignedTo: string;
   status: string;
-  replies: string;
+  replies: string[];
   escalationMatrix: string;
 }
 

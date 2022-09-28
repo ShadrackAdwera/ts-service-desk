@@ -47,44 +47,44 @@
 
 1. Auth Service
 
-| Route                                              | Purpose                                    | Verb        | Status                                                      |
-| -------------------------------------------------- | ------------------------------------------ | ----------- | ----------------------------------------------------------- |
-| <code>/api/auth/sign-up</code>                     | Sign Up                                    | <code>POST  | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/auth/login</code>                       | Login                                      | <code>POST  | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/auth/request-reset-token</code>         | Request Password Reset Link on mail        | <code>POST  | <span style="color:red; font-weight:bold">incomplete</span> |
-| <code>/api/auth//reset-password/:resetToken</code> | Resets password with the provided password | <code>PATCH | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/auth//modify-user/:userId</code>        | Modify User Role by Admin                  | <code>PATCH | <span style="color:green; font-weight:bold">complete</span> |
+| Route                                              | Purpose                                    | Verb        | Status                                 |
+| -------------------------------------------------- | ------------------------------------------ | ----------- | -------------------------------------- |
+| <code>/api/auth/sign-up</code>                     | Sign Up                                    | <code>POST  | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/auth/login</code>                       | Login                                      | <code>POST  | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/auth/request-reset-token</code>         | Request Password Reset Link on mail        | <code>POST  | $$\textcolor{red}{\text{incomplete}}$$ |
+| <code>/api/auth//reset-password/:resetToken</code> | Resets password with the provided password | <code>PATCH | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/auth//modify-user/:userId</code>        | Modify User Role by Admin                  | <code>PATCH | $$\textcolor{green}{\text{complete}}$$ |
 
 2. Groups Service
 
-| Route                                       | Purpose                   | Verb        | Status                                                      |
-| ------------------------------------------- | ------------------------- | ----------- | ----------------------------------------------------------- |
-| <code>/api/groups</code>                    | Fetch Groups              | <code>GET   | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/groups/users                     | Fetch Users               | <code>GET   | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/groups/new</code>                | Create New Group          | <code>POST  | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/groups/:groupId/add-users</code> | Add Users to a Group      | <code>PATCH | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/groups/:groupId/add-users</code> | Remove Users from a Group | <code>PATCH | <span style="color:green; font-weight:bold">complete</span> |
+| Route                                       | Purpose                   | Verb        | Status                                 |
+| ------------------------------------------- | ------------------------- | ----------- | -------------------------------------- |
+| <code>/api/groups</code>                    | Fetch Groups              | <code>GET   | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/groups/users                     | Fetch Users               | <code>GET   | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/groups/new</code>                | Create New Group          | <code>POST  | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/groups/:groupId/add-users</code> | Add Users to a Group      | <code>PATCH | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/groups/:groupId/add-users</code> | Remove Users from a Group | <code>PATCH | $$\textcolor{green}{\text{complete}}$$ |
 
 3. Categories Service
 
-| Route                                  | Purpose             | Verb         | Status                                                      |
-| -------------------------------------- | ------------------- | ------------ | ----------------------------------------------------------- |
-| <code>/api/category</code>             | Fetch Categories    | <code>GET    | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/category/new</code>         | Create New Category | <code>POST   | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/category/:categoryId</code> | Update a category   | <code>PATCH  | <span style="color:red; font-weight:bold">incomplete</span> |
-| <code>/api/category/:categoryId</code> | Delete a category   | <code>DELETE | <span style="color:red; font-weight:bold">incomplete</span> |
+| Route                                  | Purpose             | Verb         | Status                                 |
+| -------------------------------------- | ------------------- | ------------ | -------------------------------------- |
+| <code>/api/category</code>             | Fetch Categories    | <code>GET    | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/category/new</code>         | Create New Category | <code>POST   | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/category/:categoryId</code> | Update a category   | <code>PATCH  | $$\textcolor{red}{\text{incomplete}}$$ |
+| <code>/api/category/:categoryId</code> | Delete a category   | <code>DELETE | $$\textcolor{red}{\text{incomplete}}$$ |
 
 4. Tickets Service
 
-| Route                                       | Purpose                                      | Verb         | Status                                                      |
-| ------------------------------------------- | -------------------------------------------- | ------------ | ----------------------------------------------------------- |
-| <code>/api/tickets</code>                   | Fetch Tickets                                | <code>GET    | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/tickets/categories</code>        | Fetch Categories                             | <code>GET    | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/tickets/new</code>               | Create New Ticket                            | <code>POST   | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/tickets/:id</code>               | Update a ticket                              | <code>PATCH  | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/tickets/reply</code>             | Reply to a ticket                            | <code>POST   | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/tickets/escalation-matrix</code> | Select default escalation matrix for tickets | <code>PATCH  | <span style="color:green; font-weight:bold">complete</span> |
-| <code>/api/ticket/:id</code>                | Delete a ticket                              | <code>DELETE | <span style="color:red; font-weight:bold">incomplete</span> |
+| Route                                       | Purpose                                      | Verb         | Status                                 |
+| ------------------------------------------- | -------------------------------------------- | ------------ | -------------------------------------- |
+| <code>/api/tickets</code>                   | Fetch Tickets                                | <code>GET    | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/tickets/categories</code>        | Fetch Categories                             | <code>GET    | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/tickets/new</code>               | Create New Ticket                            | <code>POST   | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/tickets/:id</code>               | Update a ticket                              | <code>PATCH  | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/tickets/reply</code>             | Reply to a ticket                            | <code>POST   | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/tickets/escalation-matrix</code> | Select default escalation matrix for tickets | <code>PATCH  | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/ticket/:id</code>                | Delete a ticket                              | <code>DELETE | $$\textcolor{red}{\text{incomplete}}$$ |
 
 **_Ticket Auto Assignment is attached to a category, the assignment options can be either be:_**
 

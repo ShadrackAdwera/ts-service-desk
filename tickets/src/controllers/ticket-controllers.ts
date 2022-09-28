@@ -1,13 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
-import { HttpError } from '@adwesh/common';
-import {
-  TicketCreatedEvent,
-  TicketUpdatedEvent,
-  TicketStatus,
-} from '@adwesh/service-desk';
+import { HttpError, natsWraper } from '@adwesh/common';
+import { TicketStatus } from '@adwesh/service-desk';
 
 import { Ticket, Reply, Category, EscalationMatrix } from '../models/Ticket';
+import { TicketCreatedPublisher } from '../events/publishers/TicketCreatedPublisher';
+import { TicketUpdatedPublisher } from '../events/publishers/TicketUpdatedPublisher';
 
 const fetchTickets = async (
   req: Request,
@@ -123,7 +121,26 @@ const createTicket = async (
     );
   }
 
-  // emit event
+  try {
+    await new TicketCreatedPublisher(natsWraper.client).publish({
+      id: newTicket._id,
+      title: newTicket.title,
+      description: newTicket.description,
+      category: newTicket.category,
+      createdBy: newTicket.createdBy,
+      escalationMatrix: newTicket.escalationMatrix,
+      status: newTicket.status,
+      assignedTo: newTicket.assignedTo,
+      replies: newTicket.replies,
+    });
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
 
   res
     .status(201)

@@ -10,7 +10,7 @@ export interface TicketUpdatedEvent {
     createdBy: string;
     assignedTo: string;
     status: string;
-    replies: string;
+    replies: string[];
     escalationMatrix: string;
   };
 }

@@ -8,9 +8,9 @@ export interface TicketCreatedEvent {
     description: string;
     category: string;
     createdBy: string;
-    assignedTo: string;
+    assignedTo?: string;
     status: string;
-    replies: string;
+    replies: string[];
     escalationMatrix: string;
   };
 }

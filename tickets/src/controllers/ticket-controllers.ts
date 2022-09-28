@@ -197,7 +197,27 @@ const updateTicket = async (
     );
   }
 
-  //emit TicketUpdated Event
+  try {
+    await new TicketUpdatedPublisher(natsWraper.client).publish({
+      id: foundTicket._id,
+      title: foundTicket.title,
+      description: foundTicket.description,
+      category: foundTicket.category,
+      createdBy: foundTicket.createdBy,
+      escalationMatrix: foundTicket.escalationMatrix,
+      status: foundTicket.status,
+      assignedTo: foundTicket.assignedTo,
+      replies: foundTicket.replies,
+    });
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+
   res
     .status(200)
     .json({ message: `Ticket ref ${foundTicket.id} has been updated.` });

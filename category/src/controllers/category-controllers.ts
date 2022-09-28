@@ -21,12 +21,12 @@ const createCategory = async (
     description,
     priority,
     groups,
-    assigmentMatrix,
+    assignmentMatrix,
   }: {
     title: string;
     description: string;
     priority: string;
-    assigmentMatrix: string;
+    assignmentMatrix: string;
     defaultDueDate: number;
     groups: string[];
   } = req.body;
@@ -52,7 +52,7 @@ const createCategory = async (
     description,
     priority,
     groups,
-    assigmentMatrix,
+    assignmentMatrix,
     defaultDueDate: convertToMillis(defaultDueDate),
   });
 
@@ -71,7 +71,7 @@ const createCategory = async (
       id: newCategory._id,
       title: newCategory.title,
       priority: newCategory.priority,
-      assigmentMatrix: newCategory.assigmentMatrix,
+      assignmentMatrix: newCategory.assignmentMatrix,
       defaultDueDate: newCategory.defaultDueDate,
       groups: newCategory.groups,
     });

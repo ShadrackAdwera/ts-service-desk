@@ -11,7 +11,7 @@ const ONE_HOUR = 60 * 60 * 1000;
 interface CategoryDoc extends Document {
   title: string;
   priority: string;
-  assigmentMatrix: string;
+  assignmentMatrix: string;
   defaultDueDate: number;
   groups: string[];
   version: number;
@@ -20,7 +20,7 @@ interface CategoryDoc extends Document {
 interface CategoryModel extends Model<CategoryDoc> {
   title: string;
   priority: string;
-  assigmentMatrix: string;
+  assignmentMatrix: string;
   defaultDueDate: number;
   groups: string[];
 }

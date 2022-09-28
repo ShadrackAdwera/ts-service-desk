@@ -8,7 +8,7 @@ interface CategoryDoc extends Document {
   title: string;
   description: string;
   priority: string;
-  assigmentMatrix: string;
+  assignmentMatrix: string;
   defaultDueDate: number;
   groups: string[];
   version: number;
@@ -18,7 +18,7 @@ interface CategoryModel extends Model<CategoryDoc> {
   title: string;
   description: string;
   priority: string;
-  assigmentMatrix: string;
+  assignmentMatrix: string;
   defaultDueDate: number;
   groups: string[];
 }
@@ -43,18 +43,15 @@ const categorySchema = new Schema(
       type: String,
       required: true,
       enum: Object.values(PRIORITIES),
-      default: PRIORITIES.LOW,
     },
     assignmentMatrix: {
       type: String,
       required: true,
       enum: Object.values(ASSIGNMENT_OPTIONS),
-      default: ASSIGNMENT_OPTIONS.NO,
     },
     defaultDueDate: {
       type: Number,
       required: true,
-      default: ONE_HOUR,
     },
     groups: [
       {

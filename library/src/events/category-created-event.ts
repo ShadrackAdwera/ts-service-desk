@@ -6,7 +6,7 @@ export interface CategoryCreatedEvent {
     id: string;
     title: string;
     priority: string;
-    assigmentMatrix: string;
+    assignmentMatrix: string;
     defaultDueDate: number;
     groups: string[];
   };

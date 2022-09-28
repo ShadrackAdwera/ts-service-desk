@@ -230,7 +230,41 @@ const replyToTicket = async (
   res.status(201).json({ message: 'The reply has been registered' });
 };
 
-//TODO: Endpoints remaining
-//update ticket
-//reply to ticket
-//select default escalation matrix
+const selectDefaultEscalationMatrix = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const isError = validationResult(req);
+  if (!isError.isEmpty()) return next(new HttpError('Invalid inputs', 422));
+
+  const { escalationMatrix } = req.body;
+
+  let foundMatrix;
+
+  try {
+    foundMatrix = await EscalationMatrix.findById(escalationMatrix).exec();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+  if (!foundMatrix)
+    return next(new HttpError('This matrix does not exist', 404));
+
+  try {
+    foundMatrix.selected = 'yes';
+    await foundMatrix.save();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+  res.status(200).json({ message: 'Default matrix configured' });
+};

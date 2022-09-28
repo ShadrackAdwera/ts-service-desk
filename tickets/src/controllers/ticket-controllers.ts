@@ -268,3 +268,11 @@ const selectDefaultEscalationMatrix = async (
   }
   res.status(200).json({ message: 'Default matrix configured' });
 };
+
+export {
+  createTicket,
+  fetchTickets,
+  updateTicket,
+  selectDefaultEscalationMatrix,
+  replyToTicket,
+};

@@ -42,6 +42,28 @@ const fetchTickets = async (
   res.status(200).json({ count: foundTickets.length, tickets: foundTickets });
 };
 
+const fetchCategories = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let foundCategories;
+
+  try {
+    foundCategories = await Category.find().exec();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+  res
+    .status(200)
+    .json({ count: foundCategories.length, categories: foundCategories });
+};
+
 const createTicket = async (
   req: Request,
   res: Response,
@@ -272,6 +294,7 @@ const selectDefaultEscalationMatrix = async (
 export {
   createTicket,
   fetchTickets,
+  fetchCategories,
   updateTicket,
   selectDefaultEscalationMatrix,
   replyToTicket,

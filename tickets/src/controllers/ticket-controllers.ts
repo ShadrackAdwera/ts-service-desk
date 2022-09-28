@@ -108,26 +108,37 @@ const createTicket = async (
     .json({ message: 'Your ticket has been successfully raised.' });
 };
 
-const updateTicket = async(req: Request, res: Response, next: NextFunction) => {
+const updateTicket = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const isError = validationResult(req);
-  if(!isError.isEmpty()) {
+  if (!isError.isEmpty()) {
     return next(new HttpError('Invalid inputs', 422));
   }
 
   const ticketId = req.params.id;
-  const { title, description, category, assignedTo, status, escalationMatrix } = req.body;
+  const { title, description, category, assignedTo, status, escalationMatrix } =
+    req.body;
 
   let foundTicket;
 
-  if(!ticketId) return next(new HttpError('This ticket does not exist', 404));
+  if (!ticketId) return next(new HttpError('This ticket does not exist', 404));
 
   try {
     foundTicket = await Ticket.findById(ticketId).exec();
   } catch (error) {
-    return next(new HttpError('An error occured, try again', 500));
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
   }
 
-  if(!foundTicket) return next(new HttpError('This ticket does not exist', 404));
+  if (!foundTicket)
+    return next(new HttpError('This ticket does not exist', 404));
 
   foundTicket.title = title;
   foundTicket.description = description;
@@ -139,14 +150,85 @@ const updateTicket = async(req: Request, res: Response, next: NextFunction) => {
   try {
     await foundTicket.save();
   } catch (error) {
-    return next(new HttpError('An error occured, try again', 500));
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
   }
 
   //emit TicketUpdated Event
-  res.status(200).json({ message: `Ticket ref ${foundTicket.id} has been updated.` })
-}
+  res
+    .status(200)
+    .json({ message: `Ticket ref ${foundTicket.id} has been updated.` });
+};
 
+const replyToTicket = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const isError = validationResult(req);
+  if (!isError.isEmpty()) return next(new HttpError('Invalid inputs', 422));
 
+  const { message, ticket } = req.body;
+  const userId = req.user?.userId;
+
+  if (!userId) return next(new HttpError('Invalid user', 401));
+
+  let foundTicket;
+
+  try {
+    foundTicket = await Ticket.findById(ticket).exec();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+
+  if (!foundTicket)
+    return next(new HttpError('The ticket does not exist', 404));
+
+  //implement concurrency in posting to tickets DB and reply DB
+  const newReply = new Reply({
+    message,
+    ticket,
+    createdBy: userId,
+  });
+
+  try {
+    await newReply.save();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+
+  try {
+    foundTicket.replies.push(newReply._id);
+    await foundTicket.save();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+
+  // notify creator of ticket of this reply - or agent of this reply (need for duplicate user DB? We'll see)
+  // createdBy === userId from token (notify agent)
+  // assignedTo === userId from token (notify user)
+  // emit to email notifications service? Also a possibility
+  res.status(201).json({ message: 'The reply has been registered' });
+};
 
 //TODO: Endpoints remaining
 //update ticket

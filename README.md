@@ -47,40 +47,44 @@
 
 1. Auth Service
 
-| Route                                              | Purpose                                    | Verb        |
-| -------------------------------------------------- | ------------------------------------------ | ----------- |
-| <code>/api/auth/sign-up</code>                     | Sign Up                                    | <code>POST  |
-| <code>/api/auth/login</code>                       | Login                                      | <code>POST  |
-| <code>/api/auth/request-reset-token</code>         | Request Password Reset Link on mail        | <code>POST  |
-| <code>/api/auth//reset-password/:resetToken</code> | Resets password with the provided password | <code>PATCH |
-| <code>/api/auth//modify-user/:userId</code>        | Modify User Role by Admin                  | <code>PATCH |
+| Route                                              | Purpose                                    | Verb        | Status                                                      |
+| -------------------------------------------------- | ------------------------------------------ | ----------- | ----------------------------------------------------------- |
+| <code>/api/auth/sign-up</code>                     | Sign Up                                    | <code>POST  | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/auth/login</code>                       | Login                                      | <code>POST  | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/auth/request-reset-token</code>         | Request Password Reset Link on mail        | <code>POST  | <span style="color:red; font-weight:bold">incomplete</span> |
+| <code>/api/auth//reset-password/:resetToken</code> | Resets password with the provided password | <code>PATCH | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/auth//modify-user/:userId</code>        | Modify User Role by Admin                  | <code>PATCH | <span style="color:green; font-weight:bold">complete</span> |
 
 2. Groups Service
 
-| Route                                       | Purpose                   | Verb        |
-| ------------------------------------------- | ------------------------- | ----------- |
-| <code>/api/groups</code>                    | Fetch Groups              | <code>GET   |
-| <code>/api/groups/new</code>                | Create New Group          | <code>POST  |
-| <code>/api/groups/:groupId/add-users</code> | Add Users to a Group      | <code>PATCH |
-| <code>/api/groups/:groupId/add-users</code> | Remove Users from a Group | <code>PATCH |
+| Route                                       | Purpose                   | Verb        | Status                                                      |
+| ------------------------------------------- | ------------------------- | ----------- | ----------------------------------------------------------- |
+| <code>/api/groups</code>                    | Fetch Groups              | <code>GET   | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/groups/users                     | Fetch Users               | <code>GET   | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/groups/new</code>                | Create New Group          | <code>POST  | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/groups/:groupId/add-users</code> | Add Users to a Group      | <code>PATCH | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/groups/:groupId/add-users</code> | Remove Users from a Group | <code>PATCH | <span style="color:green; font-weight:bold">complete</span> |
 
 3. Categories Service
 
-| Route                                  | Purpose             | Verb         |
-| -------------------------------------- | ------------------- | ------------ |
-| <code>/api/category</code>             | Fetch Categories    | <code>GET    |
-| <code>/api/category/new</code>         | Create New Category | <code>POST   |
-| <code>/api/category/:categoryId</code> | Update a category   | <code>PATCH  |
-| <code>/api/category/:categoryId</code> | Delete a category   | <code>DELETE |
+| Route                                  | Purpose             | Verb         | Status                                                      |
+| -------------------------------------- | ------------------- | ------------ | ----------------------------------------------------------- |
+| <code>/api/category</code>             | Fetch Categories    | <code>GET    | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/category/new</code>         | Create New Category | <code>POST   | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/category/:categoryId</code> | Update a category   | <code>PATCH  | <span style="color:red; font-weight:bold">incomplete</span> |
+| <code>/api/category/:categoryId</code> | Delete a category   | <code>DELETE | <span style="color:red; font-weight:bold">incomplete</span> |
 
 4. Tickets Service
 
-| Route                                | Purpose           | Verb         |
-| ------------------------------------ | ----------------- | ------------ |
-| <code>/api/tickets</code>            | Fetch Tickets     | <code>GET    |
-| <code>/api/tickets/new</code>        | Create New Ticket | <code>POST   |
-| <code>/api/tickets/:ticketId</code>  | Update a ticket   | <code>PATCH  |
-| <code>/api/category/:ticketId</code> | Delete a ticket   | <code>DELETE |
+| Route                                       | Purpose                                      | Verb         | Status                                                      |
+| ------------------------------------------- | -------------------------------------------- | ------------ | ----------------------------------------------------------- |
+| <code>/api/tickets</code>                   | Fetch Tickets                                | <code>GET    | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/tickets/categories</code>        | Fetch Categories                             | <code>GET    | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/tickets/new</code>               | Create New Ticket                            | <code>POST   | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/tickets/:id</code>               | Update a ticket                              | <code>PATCH  | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/tickets/reply</code>             | Reply to a ticket                            | <code>POST   | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/tickets/escalation-matrix</code> | Select default escalation matrix for tickets | <code>PATCH  | <span style="color:green; font-weight:bold">complete</span> |
+| <code>/api/ticket/:id</code>                | Delete a ticket                              | <code>DELETE | <span style="color:red; font-weight:bold">incomplete</span> |
 
 **_Ticket Assignment is attached to a category, the assignment options can be either be:_**
 

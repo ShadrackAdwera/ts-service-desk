@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 import { app } from './app';
 import { natsWraper } from '@adwesh/common';
+import { CategoryCreatedListener } from './events/listeners/CategoryCreatedListener';
 
 if (!process.env.MONGO_URI) {
   throw new Error('MONGO URI is not defined!');
@@ -32,7 +33,7 @@ const start = async () => {
       process.exit();
     });
 
-    //configure category created listener
+    new CategoryCreatedListener(natsWraper.client).listen();
 
     process.on('SIGINT', () => natsWraper.client.close());
     process.on('SIGTERM', () => natsWraper.client.close());

@@ -108,6 +108,46 @@ const createTicket = async (
     .json({ message: 'Your ticket has been successfully raised.' });
 };
 
+const updateTicket = async(req: Request, res: Response, next: NextFunction) => {
+  const isError = validationResult(req);
+  if(!isError.isEmpty()) {
+    return next(new HttpError('Invalid inputs', 422));
+  }
+
+  const ticketId = req.params.id;
+  const { title, description, category, assignedTo, status, escalationMatrix } = req.body;
+
+  let foundTicket;
+
+  if(!ticketId) return next(new HttpError('This ticket does not exist', 404));
+
+  try {
+    foundTicket = await Ticket.findById(ticketId).exec();
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+
+  if(!foundTicket) return next(new HttpError('This ticket does not exist', 404));
+
+  foundTicket.title = title;
+  foundTicket.description = description;
+  foundTicket.category = category;
+  foundTicket.assignedTo = assignedTo;
+  foundTicket.status = status;
+  foundTicket.escalationMatrix = escalationMatrix;
+
+  try {
+    await foundTicket.save();
+  } catch (error) {
+    return next(new HttpError('An error occured, try again', 500));
+  }
+
+  //emit TicketUpdated Event
+  res.status(200).json({ message: `Ticket ref ${foundTicket.id} has been updated.` })
+}
+
+
+
 //TODO: Endpoints remaining
 //update ticket
 //reply to ticket

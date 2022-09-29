@@ -13,7 +13,7 @@ export class CategoryCreatedListener extends Listener<CategoryCreatedEvent> {
       id: string;
       title: string;
       priority: string;
-      assigmentMatrix: string;
+      assignmentMatrix: string;
       defaultDueDate: number;
       groups: string[];
     },
@@ -38,7 +38,7 @@ export class CategoryCreatedListener extends Listener<CategoryCreatedEvent> {
       _id: data.id,
       title: data.title,
       priority: data.priority,
-      assignmentMatrix: data.assigmentMatrix,
+      assignmentMatrix: data.assignmentMatrix,
       defaultDueDate: data.defaultDueDate,
       groups: data.groups,
     });

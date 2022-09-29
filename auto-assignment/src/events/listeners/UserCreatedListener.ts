@@ -2,8 +2,7 @@ import { Listener, Subjects, UserCreatedEvent } from '@adwesh/service-desk';
 import { Message } from 'node-nats-streaming';
 import { HttpError } from '@adwesh/common';
 import { User } from '../../models/Replicas';
-
-const AUTOASS_QGNAME = 'auto-assignment-service';
+import { AUTOASS_QGNAME } from './TicketCreatedListener';
 
 export class UserCreatedListener extends Listener<UserCreatedEvent> {
   subject: Subjects.UserCreated = Subjects.UserCreated;

@@ -3,7 +3,7 @@ import { Message } from 'node-nats-streaming';
 import { HttpError } from '@adwesh/common';
 import { Ticket } from '../../models/Replicas';
 
-const AUTOASS_QGNAME = 'auto-assignment-service';
+export const AUTOASS_QGNAME = 'auto-assignment-service';
 
 export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
   subject: Subjects.TicketCreated = Subjects.TicketCreated;

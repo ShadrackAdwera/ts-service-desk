@@ -6,7 +6,7 @@ import {
 import { model, Model, Document, Schema } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
-const ONE_HOUR = 60 * 60 * 1000;
+const FORTY_EIGHT_HOURS = 60 * 60 * 1000 * 48;
 
 interface CategoryDoc extends Document {
   title: string;
@@ -90,7 +90,7 @@ const categorySchema = new Schema(
     defaultDueDate: {
       type: Number,
       required: true,
-      default: ONE_HOUR,
+      default: FORTY_EIGHT_HOURS,
     },
     groups: [
       {

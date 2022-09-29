@@ -2,8 +2,6 @@ import { Schema, model, Document, Model } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { PRIORITIES, ASSIGNMENT_OPTIONS } from '@adwesh/service-desk';
 
-const ONE_HOUR = 60 * 60 * 1000;
-
 interface CategoryDoc extends Document {
   title: string;
   description: string;

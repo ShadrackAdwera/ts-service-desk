@@ -272,6 +272,11 @@ const replyToTicket = async (
 
   try {
     foundTicket.replies.push(newReply._id);
+    if (foundTicket.assignedTo === userId) {
+      foundTicket.status = TicketStatus.WAITING_REPLY;
+    } else {
+      foundTicket.status = TicketStatus.IN_PROGRESS;
+    }
     await foundTicket.save();
   } catch (error) {
     return next(

@@ -77,7 +77,7 @@ const userSchema = new Schema({
 const ticketSchema = new Schema({
   status: { type: String, required: true, enum: Object.values(TicketStatus) },
   category: { type: Schema.Types.ObjectId, required: true, ref: 'category' },
-  assignedTo: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
+  assignedTo: { type: Schema.Types.ObjectId, ref: 'user' },
 });
 
 const categorySchema = new Schema(

@@ -53,14 +53,14 @@
 | UserCreated             | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets                             |
 | UserDeleted             | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets                             |
 | UserUpdated             | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets                             |
-| CategoryCreated         | Category                                  | Tickets                                                                              |
-| CategoryUpdated         | Category                                  | Tickets                                                                              |
-| CategoryDeleted         | Category                                  | Tickets                                                                              |
+| CategoryCreated         | Category                                  | Tickets, Auto Assignment                                                             |
+| CategoryUpdated         | Category                                  | Tickets, Auto Assignment                                                             |
+| CategoryDeleted         | Category                                  | Tickets, Auto Assignment                                                             |
 | TicketCreated           | Ticket                                    | Auto Assignment, Tickets Assigned                                                    |
 | TicketUpdated           | Ticket, Auto Assignment,<br /> Escalation | Auto Assignment,<br /> Escalation, Tickets Assigned                                  |
 | TicketDeleted           | Ticket                                    | Auto Assignment,<br /> Escalation, Tickets Assigned<br />, Tickets (auto assignment) |
-| GroupCreated            | Groups                                    | Category                                                                             |
-| GroupUpdated            | Groups                                    | Category                                                                             |
+| GroupCreated            | Groups                                    | Category, Auto Assignment                                                            |
+| GroupUpdated            | Groups                                    | Category, Auto Assignment                                                            |
 | EscalationMatrixCreated | Escalation                                | Tickets                                                                              |
 | EscalationMatrixUpdated | Escalation                                | Tickets                                                                              |
 

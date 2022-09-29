@@ -11,6 +11,27 @@
 
 ![architecture](./service-desk.drawio.png)
 
+## TICKET STATUSES
+
+| Status                                       | Description                                                                                                                                                |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| $$\textcolor{yellow}{\text{OPEN}}$$          | When a new ticket has been created, it gets this status. These are tickets that are yet to be assigned to an agent.                                        |
+| $$\textcolor{blue}{\text{IN PROGRESS}}$$     | Agent has been assigned a ticket and is working on it.                                                                                                     |
+| $$\textcolor{orange}{\text{WAITING REPLY}}$$ | Tickets go into this state after an Agent replies to a ticket while waiting for more information from the user.                                            |
+| $$\textcolor{purple}{\text{ON HOLD}}$$       | This is a case that cannot be completed right away. This means that the agent needs to consult with someone on the team or another person about the issue. |
+| $$\textcolor{green}{\text{RESOLVED}}$$       | Ticket has been fully resolved.                                                                                                                            |
+
+## PRIORITIES
+
+### Response time and resolution time for given priorities (these are defaults which will be configurable from within the app)
+
+| Priority                             | Respond Within | Resolve Within |
+| ------------------------------------ | -------------- | -------------- |
+| $$\textcolor{red}{\text{Critical}}$$ | 1 hour         | 3 hours        |
+| $$\textcolor{pink}{\text{High}}$$    | 3 hours        | 5 hours        |
+| $$\textcolor{blue}{\text{Medium}}$$  | 4 hours        | 24 hours       |
+| $$\textcolor{green}{\text{Low}}$$    | 6 hours        | 48 hours       |
+
 ## SERVICES
 
 | Service          | Description                                                                                                    | CluterIP Port |
@@ -96,7 +117,7 @@
 
 - Listen to ticket created event published by Tickets service.
 - Run jobs periodically to assign tickets to agents based on the autoassignment configured for a category.
-- Use a Priotity Queue configuration to assign tickets of the highest priority first.
+- Use a Round Robin Algorithm to distribute ticket assignment to agents in a circular fashion based on active status of an agent and the number of tickets currently being handled. Should not exceed allocated throttle of an agent.
 - Publish TicketUpdated event to be listened to by Tickets Service.
 
 **No routes configured here**
@@ -123,6 +144,15 @@ _To update the README as the application continues._
 - Create a new group - (add users to this group from the duplicated DB found in groups service).
 - Create / Update group emit a GroupCreated / GroupUpdated event to Category Service.
 - Create / Update a category (CategoryCreated / CategoryUpdated event(s)) to be emmitted to tickets service.
+
+## FUTURE IMPLEMENTATION
+
+- Ticket Followers - Add more agents to a ticket. They should also be able to follow and resolve this ticket.
+- Role Based Access Control.
+- Manual assignment of tickets to agents - create a pool of users who are responsible for this.
+- Bulk assign tickets to agents.
+- Rating system for agents.
+- Add templates for creating and responding to tickets based on the category.
 
 ## License
 

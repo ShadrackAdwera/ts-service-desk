@@ -122,7 +122,8 @@ ticketSchema.set('versionKey', 'version');
 ticketSchema.plugin(updateIfCurrentPlugin);
 
 const Group = model<GroupDoc, GroupModel>('group', groupSchema);
+const User = model<UserDoc, UserModel>('user', userSchema);
 const Category = model<CategoryDoc, CategoryModel>('category', categorySchema);
 const Ticket = model<TicketDoc, TicketModel>('ticket', ticketSchema);
 
-export { Group, Category, Ticket };
+export { Group, Category, Ticket, User };

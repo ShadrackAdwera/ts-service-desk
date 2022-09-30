@@ -40,7 +40,7 @@
 | Groups           | These will be attached to categories such that an auto assignment can run on the group attached to a category. | 5001          |
 | Category         | ticket categories which will hold the auto-assignment logic                                                    | 5002          |
 | Tickets          | Tickets Raised                                                                                                 | 5003          |
-| Auto Assignment  | Run jobs to assign tickets to agents based on a priority queue data structure.                                 | 5004          |
+| Auto Assignment  | Run jobs to assign tickets to agents based on a priority queue data structure.                                 | ----          |
 | Tickets Assigned | To keep a record of the number of tickets assigned to an agent                                                 | 5005          |
 | Escalation       | To handle dynamic escalation matrices which shall be attached to tickets raised.                               | 5006          |
 
@@ -63,6 +63,7 @@
 | GroupUpdated            | Groups                                    | Category, Auto Assignment                                                            |
 | EscalationMatrixCreated | Escalation                                | Tickets                                                                              |
 | EscalationMatrixUpdated | Escalation                                | Tickets                                                                              |
+| AgentStatusUpdated      | Tickets Assigned                          | AutoAssignment                                                                       |
 
 ## Routes
 
@@ -119,6 +120,14 @@
 - Run jobs periodically to assign tickets to agents based on the autoassignment configured for a category.
 - Use a Round Robin Algorithm to distribute ticket assignment to agents in a circular fashion based on active status of an agent and the number of tickets currently being handled. Should not exceed allocated throttle of an agent.
 - Publish TicketUpdated event to be listened to by Tickets Service.
+
+6. Tickets Assigned Service
+
+| Route                                          | Purpose                                     | Verb       | Status                                 |
+| ---------------------------------------------- | ------------------------------------------- | ---------- | -------------------------------------- |
+| <code>/api/assigned</code>                     | Fetch Tickets Assigned to all agents        | <code>GET  | $$\textcolor{red}{\text{incomplete}}$$ |
+| <code>/api/assigned/:agentId</code>            | Fetch ticktets assigned to an agent         | <code>GET  | $$\textcolor{red}{\text{incomplete}}$$ |
+| <code>/api/assigned/update-agent-status</code> | Update agent status from active to inactive | <code>POST | $$\textcolor{red}{\text{incomplete}}$$ |
 
 **No routes configured here**
 

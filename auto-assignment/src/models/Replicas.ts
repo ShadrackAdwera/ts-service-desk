@@ -11,6 +11,7 @@ interface UserDoc extends Document {
   activeTickets: number;
   status: string; // if agent is active or inactive - if inactive abort mission
   timeAssigned: number; // assign agent with the greatest time assigned
+  throttle: number; // max number of tickets an agent can hold with status in progress
   version: number;
 }
 
@@ -19,6 +20,7 @@ interface UserModel extends Model<UserDoc> {
   activeTickets: number;
   status: string; // if agent is active or inactive - if inactive abort mission
   timeAssigned: number;
+  throttle: number;
 }
 
 interface TicketDoc extends Document {
@@ -71,6 +73,7 @@ const userSchema = new Schema({
     enum: ['active', 'inactive'],
     default: 'active',
   },
+  throttle: { type: Number, required: true, default: 5 },
   timeAssigned: { type: Date, required: true, default: Date.now() },
 });
 

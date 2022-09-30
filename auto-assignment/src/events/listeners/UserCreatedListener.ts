@@ -30,6 +30,7 @@ export class UserCreatedListener extends Listener<UserCreatedEvent> {
       email: data.email,
       activeTickets: 0,
       status: 'active',
+      throttle: 5,
       timeAssigned: Date.now(),
     });
     try {

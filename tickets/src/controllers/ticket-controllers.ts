@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import { HttpError, natsWraper } from '@adwesh/common';
-import { TicketStatus } from '@adwesh/service-desk';
+import { ASSIGNMENT_OPTIONS, TicketStatus } from '@adwesh/service-desk';
 
 import { Ticket, Reply, Category, EscalationMatrix } from '../models/Ticket';
 import { TicketCreatedPublisher } from '../events/publishers/TicketCreatedPublisher';
@@ -74,6 +74,7 @@ const createTicket = async (
 
   const userId = req.user?.userId;
   let foundMatrix;
+  let foundCategory;
 
   if (!userId) {
     return next(new HttpError('Invalid request', 422));
@@ -100,6 +101,20 @@ const createTicket = async (
       )
     );
 
+  try {
+    foundCategory = await Category.findById(category).exec();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+
+  if (!foundCategory)
+    return next(new HttpError('The provided category does not exist!', 404));
+
   const newTicket = new Ticket({
     title,
     description,
@@ -121,25 +136,27 @@ const createTicket = async (
     );
   }
 
-  try {
-    await new TicketCreatedPublisher(natsWraper.client).publish({
-      id: newTicket._id,
-      title: newTicket.title,
-      description: newTicket.description,
-      category: newTicket.category,
-      createdBy: newTicket.createdBy,
-      escalationMatrix: newTicket.escalationMatrix,
-      status: newTicket.status,
-      assignedTo: newTicket.assignedTo,
-      replies: newTicket.replies,
-    });
-  } catch (error) {
-    return next(
-      new HttpError(
-        error instanceof Error ? error.message : 'An error occured',
-        500
-      )
-    );
+  if (foundCategory.assignmentMatrix !== ASSIGNMENT_OPTIONS.NO) {
+    try {
+      await new TicketCreatedPublisher(natsWraper.client).publish({
+        id: newTicket._id,
+        title: newTicket.title,
+        description: newTicket.description,
+        category: newTicket.category,
+        createdBy: newTicket.createdBy,
+        escalationMatrix: newTicket.escalationMatrix,
+        status: newTicket.status,
+        assignedTo: newTicket.assignedTo,
+        replies: newTicket.replies,
+      });
+    } catch (error) {
+      return next(
+        new HttpError(
+          error instanceof Error ? error.message : 'An error occured',
+          500
+        )
+      );
+    }
   }
 
   res

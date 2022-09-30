@@ -106,6 +106,7 @@
 | <code>/api/tickets/:id</code>               | Update a ticket                              | <code>PATCH  | $$\textcolor{green}{\text{complete}}$$ |
 | <code>/api/tickets/reply</code>             | Reply to a ticket                            | <code>POST   | $$\textcolor{green}{\text{complete}}$$ |
 | <code>/api/tickets/escalation-matrix</code> | Select default escalation matrix for tickets | <code>PATCH  | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/ticket/manually-assign</code>    | Manually assign ticket to an agent           | <code>PATCH  | $$\textcolor{red}{\text{incomplete}}$$ |
 | <code>/api/ticket/:id</code>                | Delete a ticket                              | <code>DELETE | $$\textcolor{red}{\text{incomplete}}$$ |
 
 **_Ticket Auto Assignment is attached to a category, the assignment options can be either be:_**

@@ -11,6 +11,27 @@
 
 ![architecture](./service-desk.drawio.png)
 
+## TICKET STATUSES
+
+| Status                                       | Description                                                                                                                                                |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| $$\textcolor{yellow}{\text{OPEN}}$$          | When a new ticket has been created, it gets this status. These are tickets that are yet to be assigned to an agent.                                        |
+| $$\textcolor{blue}{\text{IN PROGRESS}}$$     | Agent has been assigned a ticket and is working on it.                                                                                                     |
+| $$\textcolor{orange}{\text{WAITING REPLY}}$$ | Tickets go into this state after an Agent replies to a ticket while waiting for more information from the user.                                            |
+| $$\textcolor{purple}{\text{ON HOLD}}$$       | This is a case that cannot be completed right away. This means that the agent needs to consult with someone on the team or another person about the issue. |
+| $$\textcolor{green}{\text{RESOLVED}}$$       | Ticket has been fully resolved.                                                                                                                            |
+
+## PRIORITIES
+
+### Response time and resolution time for given priorities (these are defaults which will be configurable from within the app)
+
+| Priority                             | Respond Within | Resolve Within |
+| ------------------------------------ | -------------- | -------------- |
+| $$\textcolor{red}{\text{Critical}}$$ | 1 hour         | 3 hours        |
+| $$\textcolor{pink}{\text{High}}$$    | 3 hours        | 5 hours        |
+| $$\textcolor{blue}{\text{Medium}}$$  | 4 hours        | 24 hours       |
+| $$\textcolor{green}{\text{Low}}$$    | 6 hours        | 48 hours       |
+
 ## SERVICES
 
 | Service          | Description                                                                                                    | CluterIP Port |
@@ -19,7 +40,7 @@
 | Groups           | These will be attached to categories such that an auto assignment can run on the group attached to a category. | 5001          |
 | Category         | ticket categories which will hold the auto-assignment logic                                                    | 5002          |
 | Tickets          | Tickets Raised                                                                                                 | 5003          |
-| Auto Assignment  | Run jobs to assign tickets to agents based on a priority queue data structure.                                 | 5004          |
+| Auto Assignment  | Run jobs to assign tickets to agents based on round robin algorithm and priority queue.                        | ----          |
 | Tickets Assigned | To keep a record of the number of tickets assigned to an agent                                                 | 5005          |
 | Escalation       | To handle dynamic escalation matrices which shall be attached to tickets raised.                               | 5006          |
 
@@ -32,16 +53,17 @@
 | UserCreated             | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets                             |
 | UserDeleted             | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets                             |
 | UserUpdated             | User                                      | Auto Assignment, Groups,<br /> Tickets Assigned, Tickets                             |
-| CategoryCreated         | Category                                  | Tickets                                                                              |
-| CategoryUpdated         | Category                                  | Tickets                                                                              |
-| CategoryDeleted         | Category                                  | Tickets                                                                              |
+| CategoryCreated         | Category                                  | Tickets, Auto Assignment                                                             |
+| CategoryUpdated         | Category                                  | Tickets, Auto Assignment                                                             |
+| CategoryDeleted         | Category                                  | Tickets, Auto Assignment                                                             |
 | TicketCreated           | Ticket                                    | Auto Assignment, Tickets Assigned                                                    |
 | TicketUpdated           | Ticket, Auto Assignment,<br /> Escalation | Auto Assignment,<br /> Escalation, Tickets Assigned                                  |
 | TicketDeleted           | Ticket                                    | Auto Assignment,<br /> Escalation, Tickets Assigned<br />, Tickets (auto assignment) |
-| GroupCreated            | Groups                                    | Category                                                                             |
-| GroupUpdated            | Groups                                    | Category                                                                             |
+| GroupCreated            | Groups                                    | Category, Auto Assignment                                                            |
+| GroupUpdated            | Groups                                    | Category, Auto Assignment                                                            |
 | EscalationMatrixCreated | Escalation                                | Tickets                                                                              |
 | EscalationMatrixUpdated | Escalation                                | Tickets                                                                              |
+| AgentStatusUpdated      | Tickets Assigned                          | AutoAssignment                                                                       |
 
 ## Routes
 
@@ -84,6 +106,7 @@
 | <code>/api/tickets/:id</code>               | Update a ticket                              | <code>PATCH  | $$\textcolor{green}{\text{complete}}$$ |
 | <code>/api/tickets/reply</code>             | Reply to a ticket                            | <code>POST   | $$\textcolor{green}{\text{complete}}$$ |
 | <code>/api/tickets/escalation-matrix</code> | Select default escalation matrix for tickets | <code>PATCH  | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/ticket/manually-assign</code>    | Manually assign ticket to an agent           | <code>PATCH  | $$\textcolor{red}{\text{incomplete}}$$ |
 | <code>/api/ticket/:id</code>                | Delete a ticket                              | <code>DELETE | $$\textcolor{red}{\text{incomplete}}$$ |
 
 **_Ticket Auto Assignment is attached to a category, the assignment options can be either be:_**
@@ -96,8 +119,16 @@
 
 - Listen to ticket created event published by Tickets service.
 - Run jobs periodically to assign tickets to agents based on the autoassignment configured for a category.
-- Use a Priotity Queue configuration to assign tickets of the highest priority first.
+- Use a Round Robin Algorithm to distribute ticket assignment to agents in a circular fashion based on active status of an agent and the number of tickets currently being handled. Should not exceed allocated throttle of an agent.
 - Publish TicketUpdated event to be listened to by Tickets Service.
+
+6. Tickets Assigned Service
+
+| Route                                          | Purpose                                                                   | Verb       | Status                                 |
+| ---------------------------------------------- | ------------------------------------------------------------------------- | ---------- | -------------------------------------- |
+| <code>/api/assigned</code>                     | Fetch Tickets Assigned to all agents                                      | <code>GET  | $$\textcolor{red}{\text{incomplete}}$$ |
+| <code>/api/assigned/:agentId</code>            | Fetch ticktets assigned to an agent                                       | <code>GET  | $$\textcolor{red}{\text{incomplete}}$$ |
+| <code>/api/assigned/update-agent-status</code> | Update agent status from active to inactive or throttle number of tickets | <code>POST | $$\textcolor{red}{\text{incomplete}}$$ |
 
 **No routes configured here**
 
@@ -123,6 +154,17 @@ _To update the README as the application continues._
 - Create a new group - (add users to this group from the duplicated DB found in groups service).
 - Create / Update group emit a GroupCreated / GroupUpdated event to Category Service.
 - Create / Update a category (CategoryCreated / CategoryUpdated event(s)) to be emmitted to tickets service.
+
+## FUTURE IMPLEMENTATION
+
+- Multi tenancy support.
+- Role Based Access Control.
+- Manual assignment of tickets to agents - create a pool of users who are responsible for this.
+- Ticket Followers - Add more agents to a ticket. They should also be able to follow and resolve this ticket.
+- Bulk assign tickets to agents.
+- Rating system for agents.
+- Add templates for creating and responding to tickets based on the category.
+- Switch NATS streaming server with Apache Kafka for message streaming service.
 
 ## License
 

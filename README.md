@@ -40,7 +40,7 @@
 | Groups           | These will be attached to categories such that an auto assignment can run on the group attached to a category. | 5001          |
 | Category         | ticket categories which will hold the auto-assignment logic                                                    | 5002          |
 | Tickets          | Tickets Raised                                                                                                 | 5003          |
-| Auto Assignment  | Run jobs to assign tickets to agents based on a priority queue data structure.                                 | ----          |
+| Auto Assignment  | Run jobs to assign tickets to agents based on round robin algorithm.                                           | ----          |
 | Tickets Assigned | To keep a record of the number of tickets assigned to an agent                                                 | 5005          |
 | Escalation       | To handle dynamic escalation matrices which shall be attached to tickets raised.                               | 5006          |
 

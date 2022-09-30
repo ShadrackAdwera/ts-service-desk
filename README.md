@@ -40,7 +40,7 @@
 | Groups           | These will be attached to categories such that an auto assignment can run on the group attached to a category. | 5001          |
 | Category         | ticket categories which will hold the auto-assignment logic                                                    | 5002          |
 | Tickets          | Tickets Raised                                                                                                 | 5003          |
-| Auto Assignment  | Run jobs to assign tickets to agents based on round robin algorithm.                                           | ----          |
+| Auto Assignment  | Run jobs to assign tickets to agents based on round robin algorithm and priority queue.                        | ----          |
 | Tickets Assigned | To keep a record of the number of tickets assigned to an agent                                                 | 5005          |
 | Escalation       | To handle dynamic escalation matrices which shall be attached to tickets raised.                               | 5006          |
 
@@ -156,12 +156,14 @@ _To update the README as the application continues._
 
 ## FUTURE IMPLEMENTATION
 
-- Ticket Followers - Add more agents to a ticket. They should also be able to follow and resolve this ticket.
+- Multi tenancy support.
 - Role Based Access Control.
 - Manual assignment of tickets to agents - create a pool of users who are responsible for this.
+- Ticket Followers - Add more agents to a ticket. They should also be able to follow and resolve this ticket.
 - Bulk assign tickets to agents.
 - Rating system for agents.
 - Add templates for creating and responding to tickets based on the category.
+- Switch NATS streaming server with Apache Kafka for message streaming service.
 
 ## License
 

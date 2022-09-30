@@ -179,6 +179,7 @@ const updateTicket = async (
     req.body;
 
   let foundTicket;
+  let foundCategory;
 
   if (!ticketId) return next(new HttpError('This ticket does not exist', 404));
 
@@ -195,6 +196,20 @@ const updateTicket = async (
 
   if (!foundTicket)
     return next(new HttpError('This ticket does not exist', 404));
+
+  try {
+    foundCategory = await Category.findById(category).exec();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+
+  if (!foundCategory)
+    return next(new HttpError('The provided category does not exist!', 404));
 
   foundTicket.title = title;
   foundTicket.description = description;
@@ -213,26 +228,27 @@ const updateTicket = async (
       )
     );
   }
-
-  try {
-    await new TicketUpdatedPublisher(natsWraper.client).publish({
-      id: foundTicket._id,
-      title: foundTicket.title,
-      description: foundTicket.description,
-      category: foundTicket.category,
-      createdBy: foundTicket.createdBy,
-      escalationMatrix: foundTicket.escalationMatrix,
-      status: foundTicket.status,
-      assignedTo: foundTicket.assignedTo,
-      replies: foundTicket.replies,
-    });
-  } catch (error) {
-    return next(
-      new HttpError(
-        error instanceof Error ? error.message : 'An error occured',
-        500
-      )
-    );
+  if (foundCategory.assignmentMatrix !== ASSIGNMENT_OPTIONS.NO) {
+    try {
+      await new TicketUpdatedPublisher(natsWraper.client).publish({
+        id: foundTicket._id,
+        title: foundTicket.title,
+        description: foundTicket.description,
+        category: foundTicket.category,
+        createdBy: foundTicket.createdBy,
+        escalationMatrix: foundTicket.escalationMatrix,
+        status: foundTicket.status,
+        assignedTo: foundTicket.assignedTo,
+        replies: foundTicket.replies,
+      });
+    } catch (error) {
+      return next(
+        new HttpError(
+          error instanceof Error ? error.message : 'An error occured',
+          500
+        )
+      );
+    }
   }
 
   res

@@ -123,11 +123,11 @@
 
 6. Tickets Assigned Service
 
-| Route                                          | Purpose                                     | Verb       | Status                                 |
-| ---------------------------------------------- | ------------------------------------------- | ---------- | -------------------------------------- |
-| <code>/api/assigned</code>                     | Fetch Tickets Assigned to all agents        | <code>GET  | $$\textcolor{red}{\text{incomplete}}$$ |
-| <code>/api/assigned/:agentId</code>            | Fetch ticktets assigned to an agent         | <code>GET  | $$\textcolor{red}{\text{incomplete}}$$ |
-| <code>/api/assigned/update-agent-status</code> | Update agent status from active to inactive | <code>POST | $$\textcolor{red}{\text{incomplete}}$$ |
+| Route                                          | Purpose                                                                   | Verb       | Status                                 |
+| ---------------------------------------------- | ------------------------------------------------------------------------- | ---------- | -------------------------------------- |
+| <code>/api/assigned</code>                     | Fetch Tickets Assigned to all agents                                      | <code>GET  | $$\textcolor{red}{\text{incomplete}}$$ |
+| <code>/api/assigned/:agentId</code>            | Fetch ticktets assigned to an agent                                       | <code>GET  | $$\textcolor{red}{\text{incomplete}}$$ |
+| <code>/api/assigned/update-agent-status</code> | Update agent status from active to inactive or throttle number of tickets | <code>POST | $$\textcolor{red}{\text{incomplete}}$$ |
 
 **No routes configured here**
 

@@ -1,7 +1,7 @@
 export interface ITicket {
   priority: string;
   id: string;
-  timeCreated: number;
+  //   timeCreated: number; - future modification - for duplicate priorities, also check time created
 }
 
 export class PriorityQueue {

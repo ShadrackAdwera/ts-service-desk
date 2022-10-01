@@ -14,7 +14,7 @@ class RedisClient {
     console.log(url);
     this._client = createClient({
       socket: {
-        host: 'auth-redis-service',
+        host: 'auto-assignment-redis-service',
         port: 6379,
       },
     });

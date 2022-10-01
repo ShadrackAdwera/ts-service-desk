@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auto-assignment-redis-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auto-assignment-redis
+  template:
+    metadata:
+      labels:
+        app: auto-assignment-redis
+    spec:
+      containers:
+        - name: auto-assignment-redis
+          image: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auto-assignment-redis-service
+spec:
+  selector:
+    app: auto-assignment-redis
+  ports:
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379

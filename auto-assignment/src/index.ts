@@ -4,6 +4,7 @@ import { UserCreatedListener } from './events/listeners/UserCreatedListener';
 import { TicketCreatedListener } from './events/listeners/TicketCreatedListener';
 import { CategoryCreatedListener } from './events/listeners/CategoryCreatedListener';
 import { GroupCreatedListener } from './events/listeners/GroupCreatedListener';
+import { initRedis } from './utils/init-redis';
 
 if (!process.env.JWT_KEY) {
   throw new Error('JWT is not defined!');
@@ -25,6 +26,10 @@ if (!process.env.NATS_URI) {
   throw new Error('NATS_URI must be defined');
 }
 
+if (!process.env.REDIS_URL) {
+  throw new Error('REDIS_URL must be defined');
+}
+
 const start = async () => {
   try {
     await natsWraper.connect(
@@ -44,8 +49,11 @@ const start = async () => {
 
     process.on('SIGINT', () => natsWraper.client.close());
     process.on('SIGTERM', () => natsWraper.client.close());
+    process.on('SIGINT', async () => await initRedis.client.quit());
+    process.on('SIGTERM', async () => await initRedis.client.quit());
 
     await mongoose.connect(process.env.MONGO_URI!);
+    await initRedis.connect(process.env.REDIS_URL!);
     console.log('Connected to Auto Assignment Service');
   } catch (error) {
     console.log(error);

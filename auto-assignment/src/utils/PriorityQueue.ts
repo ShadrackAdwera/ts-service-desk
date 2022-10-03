@@ -29,4 +29,17 @@ export class PriorityQueue {
       index = parentIndex;
     }
   }
+
+  extractMax(): ITicket | undefined {
+    const max = this.tickets[0];
+    const end = this.tickets.pop();
+    if (!end) return undefined;
+    this.tickets[0] = end;
+    this.bubbleDown();
+    return max;
+  }
+
+  bubbleDown(): void {
+    //TODO: Implementation . . .
+  }
 }

@@ -8,6 +8,7 @@ export * from './events/category-created-event';
 export * from './events/category-updated-event';
 export * from './events/ticket-created-event';
 export * from './events/ticket-updated-event';
+export * from './events/ticket-assigned-event';
 
 export * from './shared/Subjects';
 export * from './shared/Roles';

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auto-assignment-mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auto-assignment-mongo
+  template:
+    metadata:
+      labels:
+        app: auto-assignment-mongo
+    spec:
+      containers:
+        - name: auto-assignment-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auto-assignment-mongo-service
+spec:
+  selector:
+    app: auto-assignment-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

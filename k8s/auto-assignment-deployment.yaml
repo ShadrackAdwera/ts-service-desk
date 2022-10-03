@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auto-assignment-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auto-assignment
+  template:
+    metadata:
+      labels:
+        app: auto-assignment
+    spec:
+      containers:
+        - name: auto-assignment
+          image: us.gcr.io/servicedesk-dev-361311/auto-assignment 
+          env:
+            - name: NATS_CLUSTER_ID
+              value: 'service-desk'
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URI
+              value: 'http://nats-service:4222'
+            - name: MONGO_URI
+              value: 'mongodb://auto-assignment-mongo-service:27017/auto-assignment'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY

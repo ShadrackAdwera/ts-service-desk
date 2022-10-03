@@ -6,7 +6,7 @@ import {
 import { Schema, Document, Model, model } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
-interface UserDoc extends Document {
+export interface UserDoc extends Document {
   email: string;
   activeTickets: number;
   status: string; // if agent is active or inactive - if inactive abort mission

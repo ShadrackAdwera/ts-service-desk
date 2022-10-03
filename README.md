@@ -157,7 +157,7 @@ _To update the README as the application continues._
 
 ## FUTURE IMPLEMENTATION
 
-- Multi tenancy support.
+- Multi tenancy support and which comes with ranged sharding.
 - Role Based Access Control.
 - Manual assignment of tickets to agents - create a pool of users who are responsible for this.
 - Ticket Followers - Add more agents to a ticket. They should also be able to follow and resolve this ticket.

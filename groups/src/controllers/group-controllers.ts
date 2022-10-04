@@ -273,11 +273,9 @@ const updateAgentActiveStatus = async (
     );
   }
 
-  res
-    .status(200)
-    .json({
-      message: `Agent with ID: ${foundAgent.id} status has been updated to ${status}`,
-    });
+  res.status(200).json({
+    message: `Agent with ID: ${foundAgent.id} status has been updated to ${status}`,
+  });
 };
 
 export {
@@ -286,4 +284,5 @@ export {
   removeUsersFromGroup,
   fetchGroups,
   fetchGroupUsers,
+  updateAgentActiveStatus,
 };

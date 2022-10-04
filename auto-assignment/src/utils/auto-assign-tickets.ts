@@ -1,8 +1,9 @@
 import { natsWraper } from '@adwesh/common';
 import { ASSIGNMENT_OPTIONS, TicketStatus } from '@adwesh/service-desk';
+import { Types } from 'mongoose';
 import cron from 'node-cron';
 import { TicketAssignedPublisher } from '../events/publishers/TicketAssignedPublisher';
-import { Category, Ticket, User } from '../models/Replicas';
+import { Category, Group, Ticket, User, UserDoc } from '../models/Replicas';
 import { getMinAgent } from './get-min';
 
 import { initRedis } from './init-redis';
@@ -84,12 +85,71 @@ export const handleScheduler = () => {
           assignedTo: foundTicket.assignedTo,
           category: foundTicket.category,
         });
-      }
-
-      if (
+      } else if (
         foundCategory.assignmentMatrix === ASSIGNMENT_OPTIONS.YES_SPECIFIC_USERS
       ) {
-        //get users from group then assign
+        const foundUsers = [];
+        const agentPool: (UserDoc & { _id: Types.ObjectId })[] = [];
+        let foundGroup;
+        let foundUser;
+        for (const grp of foundCategory.groups) {
+          try {
+            foundGroup = await Group.findById(grp).exec();
+          } catch (error) {
+            console.log(error);
+            break;
+          }
+          if (foundGroup) {
+            // push all users in these groups into an array
+            foundUsers.push(...foundGroup.users);
+          }
+        }
+        //found users is an id of users from those groups - remove duplicate IDs
+        const allAgents = [...new Set(foundUsers)];
+        for (const agt of allAgents) {
+          try {
+            foundUser = await User.findById(agt).exec();
+          } catch (error) {
+            console.log(error);
+            break;
+          }
+          if (foundUser) {
+            agentPool.push(foundUser);
+          }
+        }
+        if (agentPool.length === 0) {
+          console.log('Agents not found');
+          return;
+        }
+
+        let foundAgent = getMinAgent(agentPool);
+        // if throttle is maxed out, go to next agent - TODO: implement recursion()
+        if (foundAgent.activeTickets === foundAgent.throttle) {
+          const newPool = agentPool.filter(
+            (agent) => agent.id !== foundAgent.id
+          );
+          foundAgent = getMinAgent(newPool);
+        }
+        // add to ticket
+        foundTicket.assignedTo = foundAgent._id;
+        foundTicket.status = TicketStatus.IN_PROGRESS;
+        // update time assigned, active tickets
+        foundAgent.timeAssigned = Date.now();
+        foundAgent.activeTickets = foundAgent.activeTickets + 1;
+        // TODO: create a transaction to concurrent updates to the dbs
+        // update redis cache
+        initRedis.client.set('tickets', JSON.stringify(currentQueue));
+        // save ticket to DB
+        await foundTicket.save();
+        // save agent to DB
+        await foundAgent.save();
+        // publish event
+        await new TicketAssignedPublisher(natsWraper.client).publish({
+          id: foundTicket._id,
+          status: foundTicket.status,
+          assignedTo: foundTicket.assignedTo,
+          category: foundTicket.category,
+        });
       }
     }
   });

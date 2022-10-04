@@ -14,15 +14,17 @@ interface GroupModel extends Model<GroupDoc> {
   users: string[];
 }
 
-interface UserDoc extends Document {
+export interface UserDoc extends Document {
   userId: string;
   email: string;
+  status: string;
   version: number;
 }
 
 interface UserModel extends Model<UserDoc> {
   userId: string;
   email: string;
+  status: string;
 }
 
 const groupSchema = new Schema(
@@ -38,6 +40,12 @@ const userSchema = new Schema(
   {
     userId: { type: String, required: true },
     email: { type: String, required: true },
+    status: {
+      type: String,
+      required: true,
+      enum: ['active', 'inactive'],
+      default: 'active',
+    },
   },
   { timestamps: true, toJSON: { getters: true } }
 );

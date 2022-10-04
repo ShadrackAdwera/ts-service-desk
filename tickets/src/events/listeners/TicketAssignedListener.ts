@@ -25,7 +25,7 @@ export class TicketAssignedListener extends Listener<TicketAssignedEvent> {
     }
     if (!foundTicket) {
       msg.ack();
-      console.log('This ticket does not already exist');
+      console.log('This ticket does not exist');
       return;
     }
 

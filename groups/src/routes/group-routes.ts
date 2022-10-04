@@ -8,6 +8,7 @@ import {
   removeUsersFromGroup,
   fetchGroups,
   fetchGroupUsers,
+  updateAgentActiveStatus,
 } from '../controllers/group-controllers';
 
 const router = Router();
@@ -18,5 +19,10 @@ router.get('/users', fetchGroupUsers);
 router.post('/new', [body('title').trim().isLength({ min: 3 })], createGroup);
 router.patch('/:groupId/add-users', addUsersToGroup);
 router.patch('/:groupId/remove-users', removeUsersFromGroup);
+router.patch(
+  '/:agentId/update-status',
+  [body('status').trim().not().isEmpty().isIn(['active', 'inactive'])],
+  updateAgentActiveStatus
+);
 
 export { router as groupRoutes };

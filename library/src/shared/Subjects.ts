@@ -13,4 +13,5 @@ export enum Subjects {
   GroupUpdated = 'group:updated',
   EscalationMatrixCreated = 'escalation:matrix:created',
   EscalationMatrixUpdated = 'escalation:matrix:updated',
+  AgentStatusUpdated = 'agent:status:updated',
 }

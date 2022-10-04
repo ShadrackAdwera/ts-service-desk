@@ -79,13 +79,14 @@
 
 2. Groups Service
 
-| Route                                       | Purpose                   | Verb        | Status                                 |
-| ------------------------------------------- | ------------------------- | ----------- | -------------------------------------- |
-| <code>/api/groups</code>                    | Fetch Groups              | <code>GET   | $$\textcolor{green}{\text{complete}}$$ |
-| <code>/api/groups/users                     | Fetch Users               | <code>GET   | $$\textcolor{green}{\text{complete}}$$ |
-| <code>/api/groups/new</code>                | Create New Group          | <code>POST  | $$\textcolor{green}{\text{complete}}$$ |
-| <code>/api/groups/:groupId/add-users</code> | Add Users to a Group      | <code>PATCH | $$\textcolor{green}{\text{complete}}$$ |
-| <code>/api/groups/:groupId/add-users</code> | Remove Users from a Group | <code>PATCH | $$\textcolor{green}{\text{complete}}$$ |
+| Route                                       | Purpose                                 | Verb        | Status                                 |
+| ------------------------------------------- | --------------------------------------- | ----------- | -------------------------------------- |
+| <code>/api/groups</code>                    | Fetch Groups                            | <code>GET   | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/groups/users                     | Fetch Users                             | <code>GET   | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/groups/new</code>                | Create New Group                        | <code>POST  | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/groups/:groupId/add-users</code> | Add Users to a Group                    | <code>PATCH | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/api/groups/:groupId/add-users</code> | Remove Users from a Group               | <code>PATCH | $$\textcolor{green}{\text{complete}}$$ |
+| <code>/:agentId/update-status               | Update Agent Status - Active / Inactive | <code>PATCH | $$\textcolor{green}{\text{complete}}$$ |
 
 3. Categories Service
 

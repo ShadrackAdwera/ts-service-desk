@@ -2,9 +2,11 @@ import { HttpError, natsWraper } from '@adwesh/common';
 import { validationResult } from 'express-validator';
 import { Request, Response, NextFunction } from 'express';
 
-import { Group, User } from '../models/GroupsUser';
+import { Group, User, UserDoc } from '../models/GroupsUser';
 import { GroupCreatedPublisher } from '../events/publishers/GroupCreatedPublisher';
 import { GroupUpdatedPublisher } from '../events/publishers/GroupUpdatedPublisher';
+import { Types } from 'mongoose';
+import { AgentStatusUpdatedPublisher } from '../events/publishers/AgentUpdatedPublisher';
 
 const createGroup = async (req: Request, res: Response, next: NextFunction) => {
   // TODO: Use middleware to get admin role to perform this action
@@ -231,10 +233,72 @@ const fetchGroupUsers = async (
   res.status(200).json({ count: foundUsers.length, users: foundUsers });
 };
 
+const updateAgentActiveStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const isError = validationResult(req);
+  if (!isError.isEmpty()) {
+    return next(new HttpError('Provide the correct status', 422));
+  }
+
+  const { status } = req.body;
+  const agentId = req.params;
+  let foundAgent: (UserDoc & { _id: Types.ObjectId }) | null;
+
+  try {
+    foundAgent = await User.findById(agentId).exec();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+
+  if (!foundAgent) {
+    return next(new HttpError('Agent does not exist', 404));
+  }
+
+  foundAgent.status = status;
+
+  try {
+    await foundAgent.save();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+
+  try {
+    await new AgentStatusUpdatedPublisher(natsWraper.client).publish({
+      agentId: foundAgent._id,
+      status: foundAgent.status,
+    });
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+
+  res.status(200).json({
+    message: `Agent with ID: ${foundAgent.id} status has been updated to ${status}`,
+  });
+};
+
 export {
   createGroup,
   addUsersToGroup,
   removeUsersFromGroup,
   fetchGroups,
   fetchGroupUsers,
+  updateAgentActiveStatus,
 };

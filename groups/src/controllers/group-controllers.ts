@@ -242,7 +242,8 @@ const updateAgentActiveStatus = async (
     return next(new HttpError('Provide the correct status', 422));
   }
 
-  const { agentId, status } = req.body;
+  const { status } = req.body;
+  const agentId = req.params;
   let foundAgent: (UserDoc & { _id: Types.ObjectId }) | null;
 
   try {

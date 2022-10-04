@@ -6,6 +6,7 @@ import { Group, User, UserDoc } from '../models/GroupsUser';
 import { GroupCreatedPublisher } from '../events/publishers/GroupCreatedPublisher';
 import { GroupUpdatedPublisher } from '../events/publishers/GroupUpdatedPublisher';
 import { Types } from 'mongoose';
+import { AgentStatusUpdatedPublisher } from '../events/publishers/AgentUpdatedPublisher';
 
 const createGroup = async (req: Request, res: Response, next: NextFunction) => {
   // TODO: Use middleware to get admin role to perform this action
@@ -265,6 +266,20 @@ const updateAgentActiveStatus = async (
 
   try {
     await foundAgent.save();
+  } catch (error) {
+    return next(
+      new HttpError(
+        error instanceof Error ? error.message : 'An error occured',
+        500
+      )
+    );
+  }
+
+  try {
+    await new AgentStatusUpdatedPublisher(natsWraper.client).publish({
+      agentId: foundAgent._id,
+      status: foundAgent.status,
+    });
   } catch (error) {
     return next(
       new HttpError(

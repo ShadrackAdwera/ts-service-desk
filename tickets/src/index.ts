@@ -41,7 +41,7 @@ const start = async () => {
     process.on('SIGTERM', () => natsWraper.client.close());
 
     await mongoose.connect(process.env.MONGO_URI!);
-    app.listen(5001);
+    app.listen(5003);
     console.log('Connected to Tickets Service, listening on PORT: 5003');
   } catch (error) {
     console.log(error);

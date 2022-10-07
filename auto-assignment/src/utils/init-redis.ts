@@ -10,8 +10,8 @@ class RedisClient {
     return this._client;
   }
 
-  connect(url: string): Promise<void> {
-    console.log(url);
+  connect(): Promise<void> {
+    //console.log(url);
     this._client = createClient({
       socket: {
         host: 'auto-assignment-redis-service',

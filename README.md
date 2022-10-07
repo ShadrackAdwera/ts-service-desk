@@ -166,6 +166,8 @@ _To update the README as the application continues._
 - Rating system for agents.
 - Add templates for creating and responding to tickets based on the category.
 - Switch NATS streaming server with Apache Kafka for message streaming service.
+- Configure web sockets for communication between agents and users.
+- Cache aside implementation in agents ticket assigned service.
 
 ## License
 

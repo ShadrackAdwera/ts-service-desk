@@ -117,6 +117,8 @@ const groupSchema = new Schema(
   { timestamps: true, toJSON: { getters: true } }
 );
 
+userSchema.set('versionKey', 'version');
+userSchema.plugin(updateIfCurrentPlugin);
 groupSchema.set('versionKey', 'version');
 groupSchema.plugin(updateIfCurrentPlugin);
 categorySchema.set('versionKey', 'version');

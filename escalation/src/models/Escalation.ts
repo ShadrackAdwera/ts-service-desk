@@ -1,8 +1,4 @@
-import {
-  ASSIGNMENT_OPTIONS,
-  PRIORITIES,
-  TicketStatus,
-} from '@adwesh/service-desk';
+import { PRIORITIES, TicketStatus } from '@adwesh/service-desk';
 import { Schema, Document, Model, model } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
@@ -45,15 +41,12 @@ interface CategoryModel extends Model<CategoryDoc> {
 
 const userSchema = new Schema({
   email: { type: String, required: true },
-  activeTickets: { type: Number, required: true, default: 0 },
   status: {
     type: String,
     required: true,
     enum: ['active', 'inactive'],
     default: 'active',
   },
-  throttle: { type: Number, required: true, default: 5 },
-  timeAssigned: { type: Date, required: true, default: Date.now() },
 });
 
 const ticketSchema = new Schema({
@@ -70,20 +63,10 @@ const categorySchema = new Schema(
       required: true,
       enum: Object.values(PRIORITIES),
     },
-    assignmentMatrix: {
-      type: String,
-      required: true,
-      enum: Object.values(ASSIGNMENT_OPTIONS),
-    },
     defaultDueDate: {
       type: Number,
       required: true,
     },
-    groups: [
-      {
-        type: Schema.Types.ObjectId,
-      },
-    ],
   },
   { timestamps: true, toJSON: { getters: true } }
 );

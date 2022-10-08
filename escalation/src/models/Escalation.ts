@@ -39,6 +39,23 @@ interface CategoryModel extends Model<CategoryDoc> {
   defaultDueDate: number;
 }
 
+interface EscalationDoc extends Document {
+  title: string;
+  escalationType: string;
+  actionTime: number;
+  mailTo: string[];
+  mailCC: string[];
+  version: number;
+}
+
+interface EscalationModel extends Model<EscalationDoc> {
+  title: string;
+  escalationType: string;
+  actionTime: number;
+  mailTo: string[];
+  mailCC: string[];
+}
+
 const userSchema = new Schema({
   email: { type: String, required: true },
   status: {
@@ -71,15 +88,29 @@ const categorySchema = new Schema(
   { timestamps: true, toJSON: { getters: true } }
 );
 
+const escalationSchema = new Schema({
+  title: { type: String, required: true },
+  escalationType: { type: String, required: true },
+  actionTime: { type: Number, required: true },
+  mailTo: [{ type: String }],
+  mailCC: [{ type: String }],
+});
+
 userSchema.set('versionKey', 'version');
 userSchema.plugin(updateIfCurrentPlugin);
 categorySchema.set('versionKey', 'version');
 categorySchema.plugin(updateIfCurrentPlugin);
 ticketSchema.set('versionKey', 'version');
 ticketSchema.plugin(updateIfCurrentPlugin);
+escalationSchema.set('versionKey', 'version');
+escalationSchema.plugin(updateIfCurrentPlugin);
 
 const User = model<UserDoc, UserModel>('user', userSchema);
 const Category = model<CategoryDoc, CategoryModel>('category', categorySchema);
 const Ticket = model<TicketDoc, TicketModel>('ticket', ticketSchema);
+const Escalation = model<EscalationDoc, EscalationModel>(
+  'escalation',
+  escalationSchema
+);
 
-export { Category, Ticket, User };
+export { Category, Ticket, User, Escalation };

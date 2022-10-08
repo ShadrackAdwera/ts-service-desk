@@ -39,7 +39,7 @@ interface CategoryModel extends Model<CategoryDoc> {
   defaultDueDate: number;
 }
 
-interface EscalationDoc extends Document {
+export interface EscalationDoc extends Document {
   title: string;
   escalationType: string;
   actionTime: number;

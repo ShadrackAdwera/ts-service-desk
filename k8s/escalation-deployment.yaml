@@ -44,5 +44,5 @@ spec:
   ports:
     - name: escalation
       protocol: TCP
-      port: 5006
-      targetPort: 5006
+      port: 5004
+      targetPort: 5004

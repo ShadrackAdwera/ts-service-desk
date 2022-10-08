@@ -4,7 +4,6 @@ import { HttpError, natsWraper } from '@adwesh/common';
 
 import { Category } from '../models/Category';
 import { CategoryCreatedPublisher } from '../events/publishers/CategoryCreatedPublisher';
-import { PRIORITIES } from '@adwesh/service-desk';
 
 const convertToMillis = (hours: number): number => hours * 60 * 1000;
 

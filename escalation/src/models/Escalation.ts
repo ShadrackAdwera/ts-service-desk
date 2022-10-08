@@ -88,13 +88,16 @@ const categorySchema = new Schema(
   { timestamps: true, toJSON: { getters: true } }
 );
 
-const escalationSchema = new Schema({
-  title: { type: String, required: true },
-  escalationType: { type: String, required: true },
-  actionTime: { type: Number, required: true },
-  mailTo: [{ type: String }],
-  mailCC: [{ type: String }],
-});
+const escalationSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    escalationType: { type: String, required: true },
+    actionTime: { type: Number, required: true },
+    mailTo: [{ type: String }],
+    mailCC: [{ type: String }],
+  },
+  { timestamps: true, toJSON: { getters: true } }
+);
 
 userSchema.set('versionKey', 'version');
 userSchema.plugin(updateIfCurrentPlugin);

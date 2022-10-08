@@ -38,3 +38,10 @@ spec:
                 name: tickets-service
                 port:
                   number: 5003
+          - path: /api/escalation/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: escalation-service
+                port:
+                  number: 5004

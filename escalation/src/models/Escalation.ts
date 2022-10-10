@@ -99,7 +99,11 @@ const escalationSchema = new Schema(
     escalationType: { type: String, required: true },
     action: [
       {
-        priority: { type: String, required: true },
+        priority: {
+          type: String,
+          required: true,
+          enum: Object.values(PRIORITIES),
+        },
         actionTime: { type: Number, required: true },
       },
     ],

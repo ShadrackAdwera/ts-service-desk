@@ -2,6 +2,11 @@ import { PRIORITIES, TicketStatus } from '@adwesh/service-desk';
 import { Schema, Document, Model, model } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
+interface IActions {
+  priority: string;
+  actionTime: number;
+}
+
 export interface UserDoc extends Document {
   email: string;
   status: string; // if agent is active or inactive - if inactive abort mission
@@ -42,7 +47,7 @@ interface CategoryModel extends Model<CategoryDoc> {
 export interface EscalationDoc extends Document {
   title: string;
   escalationType: string;
-  actionTime: number;
+  action: IActions[];
   mailTo: string[];
   mailCC: string[];
   version: number;
@@ -51,7 +56,7 @@ export interface EscalationDoc extends Document {
 interface EscalationModel extends Model<EscalationDoc> {
   title: string;
   escalationType: string;
-  actionTime: number;
+  action: IActions[];
   mailTo: string[];
   mailCC: string[];
 }
@@ -92,7 +97,12 @@ const escalationSchema = new Schema(
   {
     title: { type: String, required: true },
     escalationType: { type: String, required: true },
-    actionTime: { type: Number, required: true },
+    action: [
+      {
+        priority: { type: String, required: true },
+        actionTime: { type: Number, required: true },
+      },
+    ],
     mailTo: [{ type: String }],
     mailCC: [{ type: String }],
   },

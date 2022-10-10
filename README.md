@@ -25,12 +25,12 @@
 
 ### Response time and resolution time for given priorities (these are defaults which will be configurable from within the app)
 
-| Priority                             | Respond Within | Resolve Within |
-| ------------------------------------ | -------------- | -------------- |
-| $$\textcolor{red}{\text{Critical}}$$ | 1 hour         | 3 hours        |
-| $$\textcolor{pink}{\text{High}}$$    | 3 hours        | 5 hours        |
-| $$\textcolor{blue}{\text{Medium}}$$  | 4 hours        | 24 hours       |
-| $$\textcolor{green}{\text{Low}}$$    | 6 hours        | 48 hours       |
+| Priority                             | Respond Within | Resolve Within | Assign Within |
+| ------------------------------------ | -------------- | -------------- | ------------- |
+| $$\textcolor{red}{\text{Critical}}$$ | 1 hour         | 3 hours        | 45 minutes    |
+| $$\textcolor{pink}{\text{High}}$$    | 3 hours        | 5 hours        | 2 hours       |
+| $$\textcolor{blue}{\text{Medium}}$$  | 4 hours        | 24 hours       | 3 hours       |
+| $$\textcolor{green}{\text{Low}}$$    | 6 hours        | 48 hours       | 5 hours       |
 
 ## SERVICES
 

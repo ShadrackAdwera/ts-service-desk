@@ -1,6 +1,6 @@
 {
   "name": "@adwesh/service-desk",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "Event emmitting library for the service desk microservice",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",

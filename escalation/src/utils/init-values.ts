@@ -1,8 +1,35 @@
-import { Escalation, EscalationDoc } from '../models/Escalation';
-import { EscalationTitles, EscalationTypes } from '@adwesh/service-desk';
+import { Escalation, EscalationDoc, IActions } from '../models/Escalation';
+import {
+  EscalationTitles,
+  EscalationTypes,
+  PRIORITIES,
+} from '@adwesh/service-desk';
 import { Types } from 'mongoose';
 import { HttpError, natsWraper } from '@adwesh/common';
 import { EscalationCreatedPublisher } from '../events/publishers/EscalationCreated';
+
+const convertToMillis = (hours: number) => hours * 60 * 60 * 1000;
+
+const replyArray: IActions[] = [
+  { priority: PRIORITIES.CRITICAL, actionTime: convertToMillis(1) },
+  { priority: PRIORITIES.HIGH, actionTime: convertToMillis(3) },
+  { priority: PRIORITIES.MEDIUM, actionTime: convertToMillis(4) },
+  { priority: PRIORITIES.LOW, actionTime: convertToMillis(6) },
+];
+
+const resolveArray: IActions[] = [
+  { priority: PRIORITIES.CRITICAL, actionTime: convertToMillis(3) },
+  { priority: PRIORITIES.HIGH, actionTime: convertToMillis(5) },
+  { priority: PRIORITIES.MEDIUM, actionTime: convertToMillis(24) },
+  { priority: PRIORITIES.LOW, actionTime: convertToMillis(48) },
+];
+
+const assignedArray: IActions[] = [
+  { priority: PRIORITIES.CRITICAL, actionTime: convertToMillis(0.75) },
+  { priority: PRIORITIES.HIGH, actionTime: convertToMillis(2) },
+  { priority: PRIORITIES.MEDIUM, actionTime: convertToMillis(3) },
+  { priority: PRIORITIES.LOW, actionTime: convertToMillis(5) },
+];
 
 type TEscalation = EscalationDoc & { _id: Types.ObjectId };
 // TODO: Refactor this logic
@@ -26,7 +53,7 @@ export const configureDefaultEscalations = async () => {
     const replyMatrix = new Escalation({
       title: EscalationTitles.REPLY_ESCALATION,
       escalationType: EscalationTypes.REPLY_TO,
-      actionTime: 2,
+      action: replyArray,
     });
 
     try {
@@ -36,7 +63,7 @@ export const configureDefaultEscalations = async () => {
         id: replyMatrix._id,
         title: replyMatrix.title,
         escalationType: replyMatrix.escalationType,
-        actionTime: replyMatrix.actionTime,
+        action: replyMatrix.action,
       });
     } catch (error) {
       throw new HttpError(
@@ -61,7 +88,7 @@ export const configureDefaultEscalations = async () => {
     const resolvedMatrix = new Escalation({
       title: EscalationTitles.RESOLVED_ESCALATION,
       escalationType: EscalationTypes.RESOLVED,
-      actionTime: 2,
+      action: resolveArray,
     });
 
     try {
@@ -71,7 +98,7 @@ export const configureDefaultEscalations = async () => {
         id: resolvedMatrix._id,
         title: resolvedMatrix.title,
         escalationType: resolvedMatrix.escalationType,
-        actionTime: resolvedMatrix.actionTime,
+        action: resolvedMatrix.action,
       });
     } catch (error) {
       throw new HttpError(
@@ -96,7 +123,7 @@ export const configureDefaultEscalations = async () => {
     const assignedMatrix = new Escalation({
       title: EscalationTitles.ASSIGNED_ESCALATION,
       escalationType: EscalationTypes.ASSIGNED,
-      actionTime: 2,
+      action: assignedArray,
     });
 
     try {
@@ -106,7 +133,7 @@ export const configureDefaultEscalations = async () => {
         id: assignedMatrix._id,
         title: assignedMatrix.title,
         escalationType: assignedMatrix.escalationType,
-        actionTime: assignedMatrix.actionTime,
+        action: assignedMatrix.action,
       });
     } catch (error) {
       throw new HttpError(

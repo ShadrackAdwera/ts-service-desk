@@ -170,7 +170,7 @@ _To update the README as the application continues._
 - Add templates for creating and responding to tickets based on the category.
 - Switch NATS streaming server with Apache Kafka as a message broker.
 - Configure web sockets for communication between agents and users.
-- Cache aside implementation in agents ticket assigned service.
+- Read through cache implementation in agents ticket assigned service.
 - Wire up CI through GitHub Actions.
 
 ## License

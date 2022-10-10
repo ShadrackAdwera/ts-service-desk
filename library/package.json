@@ -1,6 +1,6 @@
 {
   "name": "@adwesh/service-desk",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Event emmitting library for the service desk microservice",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -20,6 +20,7 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "@adwesh/service-desk": "^1.0.22",
     "node-nats-streaming": "^0.3.2"
   }
 }

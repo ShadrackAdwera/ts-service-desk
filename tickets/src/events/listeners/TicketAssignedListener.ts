@@ -3,7 +3,7 @@ import { HttpError } from '@adwesh/common';
 import { Message } from 'node-nats-streaming';
 import { Ticket } from '../../models/Ticket';
 
-const TICKETS_QUEUE_GROUP = 'tickets-service';
+export const TICKETS_QUEUE_GROUP = 'tickets-service';
 
 export class TicketAssignedListener extends Listener<TicketAssignedEvent> {
   subject: Subjects.TicketAssigned = Subjects.TicketAssigned;

@@ -40,6 +40,14 @@ const fetchTickets = async (
   res.status(200).json({ count: foundTickets.length, tickets: foundTickets });
 };
 
+const findTicketById = (req: Request, res: Response, next: NextFunction) => {
+  /*
+  - TODO:implement Cache Aside - find ticket by id (store query result in redis)
+  - Next fetch we check redis for this ID, if it exists, return the result
+  - If not, fetch from mongodb then update the cache
+  */
+};
+
 const fetchCategories = async (
   req: Request,
   res: Response,

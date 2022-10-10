@@ -33,6 +33,11 @@ const updateEscalationMatrix = async (
   res: Response,
   next: NextFunction
 ) => {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return next(new HttpError('Invalid inputs', 422));
+  }
+
   const id = req.params.matrixId;
   let foundMatrix: TEscalation | null;
 
@@ -69,3 +74,5 @@ const updateEscalationMatrix = async (
     .status(200)
     .json({ message: `Escalation: ${foundMatrix.title} has been updated.` });
 };
+
+export { getEscalationMatrices, updateEscalationMatrix };

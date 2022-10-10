@@ -20,7 +20,6 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "@adwesh/service-desk": "^1.0.22",
     "node-nats-streaming": "^0.3.2"
   }
 }

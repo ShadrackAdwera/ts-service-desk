@@ -8,7 +8,7 @@ import { Types } from 'mongoose';
 import { HttpError, natsWraper } from '@adwesh/common';
 import { EscalationCreatedPublisher } from '../events/publishers/EscalationCreated';
 
-const convertToMillis = (hours: number) => hours * 60 * 60 * 1000;
+export const convertToMillis = (hours: number) => hours * 60 * 60 * 1000;
 
 const replyArray: IActions[] = [
   { priority: PRIORITIES.CRITICAL, actionTime: convertToMillis(1) },

@@ -3,6 +3,7 @@ import { HttpError } from '@adwesh/common';
 import { Request, Response, NextFunction } from 'express';
 import { Types } from 'mongoose';
 import { Escalation, EscalationDoc } from '../models/Escalation';
+import { convertToMillis } from '../utils/init-values';
 
 type TEscalation = EscalationDoc & { _id: Types.ObjectId };
 
@@ -41,7 +42,7 @@ const updateEscalationMatrix = async (
   const id = req.params.matrixId;
   let foundMatrix: TEscalation | null;
 
-  const { actionTime } = req.body;
+  const { priority, actionTime } = req.body;
 
   try {
     foundMatrix = await Escalation.findById(id).exec();
@@ -58,7 +59,20 @@ const updateEscalationMatrix = async (
     return next(new HttpError('The provided matrix does not exist', 404));
   }
 
-  foundMatrix.actionTime = actionTime;
+  const actn = foundMatrix.action.find((act) => act.priority === priority);
+
+  if (!actn) {
+    return next(new HttpError('The priority provided does not exist', 422));
+  }
+
+  const toUpdateIdx = foundMatrix.action.findIndex(
+    (act) => act.priority === priority
+  );
+
+  foundMatrix.action[toUpdateIdx] = {
+    priority,
+    actionTime: convertToMillis(actionTime),
+  };
 
   try {
     await foundMatrix.save();
@@ -70,7 +84,7 @@ const updateEscalationMatrix = async (
       )
     );
   }
-  // TODO: Add escalation updated publisher
+
   res
     .status(200)
     .json({ message: `Escalation: ${foundMatrix.title} has been updated.` });

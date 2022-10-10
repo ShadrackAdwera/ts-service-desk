@@ -18,3 +18,4 @@ export * from './shared/Roles';
 export * from './shared/AssignmentOptions';
 export * from './shared/Priorities';
 export * from './shared/TicketStatus';
+export * from './shared/EscalationConfig';

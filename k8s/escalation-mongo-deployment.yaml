@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: escalation-mongo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: escalation-mongo
+  template:
+    metadata:
+      labels:
+        app: escalation-mongo
+    spec:
+      containers:
+        - name: escalation-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: escalation-mongo-service
+spec:
+  selector:
+    app: escalation-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

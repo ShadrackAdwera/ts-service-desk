@@ -2,12 +2,11 @@ import { CategoryCreatedEvent, Subjects, Listener } from '@adwesh/service-desk';
 import { HttpError } from '@adwesh/common';
 import { Message } from 'node-nats-streaming';
 import { Category } from '../../models/Ticket';
-
-const CATEGORY_QUEUE_GROUP = 'category-service';
+import { TICKETS_QUEUE_GROUP } from './TicketAssignedListener';
 
 export class CategoryCreatedListener extends Listener<CategoryCreatedEvent> {
   subject: Subjects.CategoryCreated = Subjects.CategoryCreated;
-  queueGroupName: string = CATEGORY_QUEUE_GROUP;
+  queueGroupName: string = TICKETS_QUEUE_GROUP;
   async onMessage(
     data: {
       id: string;

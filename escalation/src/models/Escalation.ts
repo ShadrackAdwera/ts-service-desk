@@ -1,26 +1,16 @@
-import {
-  ASSIGNMENT_OPTIONS,
-  PRIORITIES,
-  TicketStatus,
-} from '@adwesh/service-desk';
+import { PRIORITIES, TicketStatus } from '@adwesh/service-desk';
 import { Schema, Document, Model, model } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 export interface UserDoc extends Document {
   email: string;
-  activeTickets: number;
   status: string; // if agent is active or inactive - if inactive abort mission
-  timeAssigned: number; // assign agent with the greatest time assigned
-  throttle: number; // max number of tickets an agent can hold with status in progress
   version: number;
 }
 
 interface UserModel extends Model<UserDoc> {
   email: string;
-  activeTickets: number;
   status: string; // if agent is active or inactive - if inactive abort mission
-  timeAssigned: number;
-  throttle: number;
 }
 
 interface TicketDoc extends Document {
@@ -39,42 +29,41 @@ interface TicketModel extends Model<TicketDoc> {
 interface CategoryDoc extends Document {
   title: string;
   priority: string;
-  assignmentMatrix: string;
   defaultDueDate: number;
-  groups: string[];
   version: number;
 }
 
 interface CategoryModel extends Model<CategoryDoc> {
   title: string;
   priority: string;
-  assignmentMatrix: string;
   defaultDueDate: number;
-  groups: string[];
 }
 
-interface GroupDoc extends Document {
+export interface EscalationDoc extends Document {
   title: string;
-  users: string[];
+  escalationType: string;
+  actionTime: number;
+  mailTo: string[];
+  mailCC: string[];
   version: number;
 }
 
-interface GroupModel extends Model<GroupDoc> {
+interface EscalationModel extends Model<EscalationDoc> {
   title: string;
-  users: string[];
+  escalationType: string;
+  actionTime: number;
+  mailTo: string[];
+  mailCC: string[];
 }
 
 const userSchema = new Schema({
   email: { type: String, required: true },
-  activeTickets: { type: Number, required: true, default: 0 },
   status: {
     type: String,
     required: true,
     enum: ['active', 'inactive'],
     default: 'active',
   },
-  throttle: { type: Number, required: true, default: 5 },
-  timeAssigned: { type: Date, required: true, default: Date.now() },
 });
 
 const ticketSchema = new Schema({
@@ -91,44 +80,40 @@ const categorySchema = new Schema(
       required: true,
       enum: Object.values(PRIORITIES),
     },
-    assignmentMatrix: {
-      type: String,
-      required: true,
-      enum: Object.values(ASSIGNMENT_OPTIONS),
-    },
     defaultDueDate: {
       type: Number,
       required: true,
     },
-    groups: [
-      {
-        type: Schema.Types.ObjectId,
-      },
-    ],
   },
   { timestamps: true, toJSON: { getters: true } }
 );
 
-const groupSchema = new Schema(
+const escalationSchema = new Schema(
   {
     title: { type: String, required: true },
-    users: [{ type: Schema.Types.ObjectId }],
+    escalationType: { type: String, required: true },
+    actionTime: { type: Number, required: true },
+    mailTo: [{ type: String }],
+    mailCC: [{ type: String }],
   },
   { timestamps: true, toJSON: { getters: true } }
 );
 
 userSchema.set('versionKey', 'version');
 userSchema.plugin(updateIfCurrentPlugin);
-groupSchema.set('versionKey', 'version');
-groupSchema.plugin(updateIfCurrentPlugin);
 categorySchema.set('versionKey', 'version');
 categorySchema.plugin(updateIfCurrentPlugin);
 ticketSchema.set('versionKey', 'version');
 ticketSchema.plugin(updateIfCurrentPlugin);
+escalationSchema.set('versionKey', 'version');
+escalationSchema.plugin(updateIfCurrentPlugin);
 
-const Group = model<GroupDoc, GroupModel>('group', groupSchema);
 const User = model<UserDoc, UserModel>('user', userSchema);
 const Category = model<CategoryDoc, CategoryModel>('category', categorySchema);
 const Ticket = model<TicketDoc, TicketModel>('ticket', ticketSchema);
+const Escalation = model<EscalationDoc, EscalationModel>(
+  'escalation',
+  escalationSchema
+);
 
-export { Group, Category, Ticket, User };
+export { Category, Ticket, User, Escalation };

@@ -10,9 +10,12 @@ export * from './events/ticket-created-event';
 export * from './events/ticket-updated-event';
 export * from './events/ticket-assigned-event';
 export * from './events/agent-status-updated';
+export * from './events/escalation-created-event';
+export * from './events/escalation-updated-event';
 
 export * from './shared/Subjects';
 export * from './shared/Roles';
 export * from './shared/AssignmentOptions';
 export * from './shared/Priorities';
 export * from './shared/TicketStatus';
+export * from './shared/EscalationConfig';

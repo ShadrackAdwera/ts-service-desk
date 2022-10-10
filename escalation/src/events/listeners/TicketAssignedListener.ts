@@ -1,9 +1,9 @@
 import { TicketAssignedEvent, Subjects, Listener } from '@adwesh/service-desk';
 import { HttpError } from '@adwesh/common';
 import { Message } from 'node-nats-streaming';
-import { Ticket } from '../../models/Ticket';
+import { Ticket } from '../../models/Escalation';
 
-export const TICKETS_QUEUE_GROUP = 'tickets-service';
+const TICKETS_QUEUE_GROUP = 'tickets-service';
 
 export class TicketAssignedListener extends Listener<TicketAssignedEvent> {
   subject: Subjects.TicketAssigned = Subjects.TicketAssigned;

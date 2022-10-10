@@ -43,6 +43,7 @@
 | Escalation       | To handle dynamic escalation matrices which shall be attached to tickets raised.                               | 5004          |
 | Tickets Assigned | To keep a record of the number of tickets assigned to an agent                                                 | 5005          |
 | Auto Assignment  | Run jobs to assign tickets to agents based on round robin algorithm and priority queue.                        | ----          |
+| Tenant           | To maintain users in a tenant - for hash based sharding                                                        | 5006          |
 
 **Services communicate asynchronously with each other through publishing events**
 
@@ -158,16 +159,19 @@ _To update the README as the application continues._
 
 ## FUTURE IMPLEMENTATION
 
-- Multi tenancy support and which comes with ranged sharding.
+- Multi tenancy support.
+- Configure horizontal scaling through ranged sharding.
 - Role Based Access Control.
 - Manual assignment of tickets to agents - create a pool of users who are responsible for this.
 - Ticket Followers - Add more agents to a ticket. They should also be able to follow and resolve this ticket.
 - Bulk assign tickets to agents.
 - Rating system for agents.
+- Scalable Image / File uploads.
 - Add templates for creating and responding to tickets based on the category.
-- Switch NATS streaming server with Apache Kafka for message streaming service.
+- Switch NATS streaming server with Apache Kafka as a message broker.
 - Configure web sockets for communication between agents and users.
 - Cache aside implementation in agents ticket assigned service.
+- Wire up CI through GitHub Actions.
 
 ## License
 

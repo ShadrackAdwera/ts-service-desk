@@ -2,7 +2,7 @@ import { PRIORITIES, TicketStatus } from '@adwesh/service-desk';
 import { Schema, Document, Model, model } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
-interface IActions {
+export interface IActions {
   priority: string;
   actionTime: number;
 }

@@ -3,6 +3,11 @@ import mongoose from 'mongoose';
 
 import { app } from './app';
 import { natsWraper } from '@adwesh/common';
+import { configureDefaultEscalations } from './utils/init-values';
+import { AgentStatusUpdatedListener } from './events/listeners/AgentUpdatedListener';
+import { TicketAssignedListener } from './events/listeners/TicketAssignedListener';
+import { TicketCreatedListener } from './events/listeners/TicketCreatedListener';
+import { UserCreatedListener } from './events/listeners/UserCreatedListener';
 
 if (!process.env.MONGO_URI) {
   throw new Error('MONGO URI is not defined!');
@@ -33,6 +38,11 @@ const start = async () => {
       process.exit();
     });
 
+    new AgentStatusUpdatedListener(natsWraper.client).listen();
+    new TicketAssignedListener(natsWraper.client).listen();
+    new TicketCreatedListener(natsWraper.client).listen();
+    new UserCreatedListener(natsWraper.client).listen();
+
     process.on('SIGINT', () => natsWraper.client.close());
     process.on('SIGTERM', () => natsWraper.client.close());
 
@@ -45,3 +55,4 @@ const start = async () => {
 };
 
 start();
+configureDefaultEscalations();

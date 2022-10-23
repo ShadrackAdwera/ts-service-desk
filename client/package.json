@@ -1,8 +1,8 @@
 {
-  "name": "@minimal/minimal-kit-react",
-  "author": "Minimals UI",
+  "name": "client",
+  "author": "adwera",
   "version": "4.0.0",
-  "description": "Simple React Scripts & Javascript",
+  "description": "Client Microservice",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
